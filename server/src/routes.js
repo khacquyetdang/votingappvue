@@ -32,7 +32,7 @@ module.exports = app => {
             oauth_verifier: req.query.oauth_verifier,
           },
         },
-        function(err, r, body) {
+        (err, r, body) => {
           if (err) {
             return res.send(HttpStatus.INTERNAL_SERVER_ERROR, {
               msg: err.message,

@@ -1,12 +1,24 @@
 <template>
   <div id="app">
-    <router-view/>
+    <v-app light>
+      <page-header></page-header>
+      <v-content>
+        <v-container fluid>
+          <router-view/>
+        </v-container>
+      </v-content>
+    </v-app>
   </div>
 </template>
 
 <script>
+import PageHeader from '@/components/Header';
+
 export default {
   name: 'App',
+  components: {
+    PageHeader,
+  },
 };
 </script>
 
@@ -16,7 +28,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
   margin-top: 60px;
 }
 </style>
