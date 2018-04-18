@@ -1,32 +1,56 @@
 <template>
   <v-container grid-list-xl>
-    <v-layout row wrap>
-      <v-flex xs6 sm2 md6 offset-xs3 offset-md3>
+    <v-layout row
+              wrap>
+      <v-flex xs6
+              sm2
+              md6
+              offset-xs3
+              offset-md3>
         <div class="white elevation-2">
-          <v-toolbar flat dense class="cyan" dark>
+          <v-toolbar flat
+                     dense
+                     class="cyan"
+                     dark>
             <v-toolbar-title>Register</v-toolbar-title>
           </v-toolbar>
           <div class="pl-4 pr-4 pt-2 pb-2">
-            <v-form autocomplete="off" ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="email" label="Email" 
-              :error-messages="errors.collect('email')" 
-              name="email" data-vv-delay="30" v-validate="{required: true, email: true}">
+            <v-form autocomplete="off"
+                    ref="form"
+                    v-model="valid"
+                    lazy-validation>
+              <v-text-field v-model="email"
+                            label="Email"
+                            :error-messages="errors.collect('email')"
+                            name="email"
+                            data-vv-delay="30"
+                            v-validate="{required: true, email: true}">
               </v-text-field>
-              <v-text-field v-model="password" ref="password" :type="'password'" 
-              data-vv-name="password" 
-              v-validate="'required|min:6'"
-              data-vv-delay="100" 
-              data-vv-rules="required" 
-              :error-messages="errors.collect('password')"
-              label="Password" autocomplete="new-password" required>
+              <v-text-field v-model="password"
+                            ref="password"
+                            :type="'password'"
+                            data-vv-name="password"
+                            v-validate="'required|min:6'"
+                            data-vv-delay="100"
+                            data-vv-rules="required"
+                            :error-messages="errors.collect('password')"
+                            label="Password"
+                            autocomplete="new-password"
+                            required>
               </v-text-field>
-              <v-text-field v-model="confirmPassword" :type="'password'" 
-              data-vv-name="password_confirmation" 
-              :error-messages="errors.collect('password_confirmation')"              
-              data-vv-delay="100" v-validate="'required|confirmed:$password'" 
-              label="Confirm password" autocomplete="new-password" required>
+              <v-text-field v-model="confirmPassword"
+                            :type="'password'"
+                            data-vv-name="password_confirmation"
+                            :error-messages="errors.collect('password_confirmation')"
+                            data-vv-delay="100"
+                            v-validate="'required|confirmed:$password'"
+                            label="Confirm password"
+                            autocomplete="new-password"
+                            required>
               </v-text-field>
-              <v-btn class="cyan" :disabled="errors.items.length > 0" @click="register">Register</v-btn>
+              <v-btn class="cyan"
+                     :disabled="errors.items.length > 0"
+                     @click="register">Register</v-btn>
               <v-btn @click="clear">clear</v-btn>
             </v-form>
           </div>
@@ -45,24 +69,8 @@ export default {
     return {
       valid: true,
       email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v =>
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          'E-mail must be valid',
-      ],
       password: '',
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
-      ],
       confirmPassword: '',
-      confirmPasswordRules: [
-        v => !!v || 'Confirm password is required',
-        v =>
-          (v && v.length >= 6) ||
-          'Confirm Password must be more than 6 characters',
-      ],
     };
   },
   methods: {
@@ -73,6 +81,7 @@ export default {
           password: this.password,
           confirmPassword: this.confirmPassword,
         });
+        this.$store.dispatch('setToken', response.data.access_token);
         console.log('response', response);
       } catch (error) {
         console.log('error', error);
