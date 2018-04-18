@@ -29,6 +29,7 @@ module.exports = {
     "quotes": [
       "error", "single"
     ],
+    "max-len": [0],
     'comma-dangle': [
       'error', {
         arrays: 'always-multiline',

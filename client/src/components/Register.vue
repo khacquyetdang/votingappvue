@@ -7,14 +7,27 @@
             <v-toolbar-title>Register</v-toolbar-title>
           </v-toolbar>
           <div class="pl-4 pr-4 pt-2 pb-2">
-            <v-form autocomplete="off">
-              <v-text-field v-model="email" label="Email" required>
+            <v-form autocomplete="off" ref="form" v-model="valid" lazy-validation>
+              <v-text-field v-model="email" label="Email" 
+              :error-messages="errors.collect('email')" 
+              name="email" data-vv-delay="30" v-validate="{required: true, email: true}">
               </v-text-field>
-              <v-text-field v-model="password" :type="'password'" label="Password" autocomplete="new-password">
+              <v-text-field v-model="password" ref="password" :type="'password'" 
+              data-vv-name="password" 
+              v-validate="'required|min:6'"
+              data-vv-delay="100" 
+              data-vv-rules="required" 
+              :error-messages="errors.collect('password')"
+              label="Password" autocomplete="new-password" required>
               </v-text-field>
-              <v-text-field v-model="confirmpassword" :type="'password'" label="Confirm password" autocomplete="new-password">
+              <v-text-field v-model="confirmPassword" :type="'password'" 
+              data-vv-name="password_confirmation" 
+              :error-messages="errors.collect('password_confirmation')"              
+              data-vv-delay="100" v-validate="'required|confirmed:$password'" 
+              label="Confirm password" autocomplete="new-password" required>
               </v-text-field>
-              <v-btn class="cyan" @click="register">Register</v-btn>
+              <v-btn class="cyan" :disabled="errors.items.length > 0" @click="register">Register</v-btn>
+              <v-btn @click="clear">clear</v-btn>
             </v-form>
           </div>
         </div>
@@ -30,18 +43,43 @@ export default {
   name: 'Register',
   data() {
     return {
+      valid: true,
       email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'E-mail must be valid',
+      ],
       password: '',
-      confirmpassword: '',
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+      ],
+      confirmPassword: '',
+      confirmPasswordRules: [
+        v => !!v || 'Confirm password is required',
+        v =>
+          (v && v.length >= 6) ||
+          'Confirm Password must be more than 6 characters',
+      ],
     };
   },
   methods: {
     async register() {
-      const response = await AuthenticationService.register({
-        email: this.email,
-        password: this.password,
-      });
-      console.log('response', response);
+      try {
+        const response = await AuthenticationService.register({
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+        });
+        console.log('response', response);
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+    clear() {
+      this.$refs.form.reset();
     },
   },
 };
