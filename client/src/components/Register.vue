@@ -1,68 +1,66 @@
 <template>
-  <v-container grid-list-xl>
-    <v-layout row
-              wrap>
-      <v-flex xs6
-              sm2
-              md6
-              offset-xs3
-              offset-md3>
-        <div class="white elevation-2">
-          <v-toolbar flat
-                     dense
-                     class="cyan"
-                     dark>
-            <v-toolbar-title>Register</v-toolbar-title>
-          </v-toolbar>
-          <div class="pl-4 pr-4 pt-2 pb-2">
-            <v-form autocomplete="off"
-                    ref="form"
-                    v-model="valid"
-                    lazy-validation>
-              <v-text-field v-model="email"
-                            label="Email"
-                            :error-messages="errors.collect('email')"
-                            name="email"
-                            data-vv-delay="30"
-                            v-validate="{required: true, email: true}">
-              </v-text-field>
-              <v-text-field v-model="password"
-                            ref="password"
-                            :type="'password'"
-                            data-vv-name="password"
-                            v-validate="'required|min:6'"
-                            data-vv-delay="100"
-                            data-vv-rules="required"
-                            :error-messages="errors.collect('password')"
-                            label="Password"
-                            autocomplete="new-password"
-                            required>
-              </v-text-field>
-              <v-text-field v-model="confirmPassword"
-                            :type="'password'"
-                            data-vv-name="password_confirmation"
-                            :error-messages="errors.collect('password_confirmation')"
-                            data-vv-delay="100"
-                            v-validate="'required|confirmed:$password'"
-                            label="Confirm password"
-                            autocomplete="new-password"
-                            required>
-              </v-text-field>
-              <v-alert v-if="error !== null"
-                       type="error"
-                       :value="true"
-                       v-html="error" />
+  <v-layout row
+            wrap>
+    <v-flex xs12
+            sm2
+            md6
+            offset-xs0
+            offset-md3>
+      <div class="white elevation-2">
+        <v-toolbar flat
+                   dense
+                   class="cyan"
+                   dark>
+          <v-toolbar-title>Register</v-toolbar-title>
+        </v-toolbar>
+        <div class="pl-4 pr-4 pt-2 pb-2">
+          <v-form autocomplete="off"
+                  ref="form"
+                  v-model="valid"
+                  lazy-validation>
+            <v-text-field v-model="email"
+                          label="Email"
+                          :error-messages="errors.collect('email')"
+                          name="email"
+                          data-vv-delay="30"
+                          v-validate="{required: true, email: true}">
+            </v-text-field>
+            <v-text-field v-model="password"
+                          ref="password"
+                          :type="'password'"
+                          data-vv-name="password"
+                          v-validate="'required|min:6'"
+                          data-vv-delay="100"
+                          data-vv-rules="required"
+                          :error-messages="errors.collect('password')"
+                          label="Password"
+                          autocomplete="new-password"
+                          required>
+            </v-text-field>
+            <v-text-field v-model="confirmPassword"
+                          :type="'password'"
+                          data-vv-name="password_confirmation"
+                          :error-messages="errors.collect('password_confirmation')"
+                          data-vv-delay="100"
+                          v-validate="'required|confirmed:$password'"
+                          label="Confirm password"
+                          autocomplete="new-password"
+                          required>
+            </v-text-field>
+            <v-alert v-if="error !== null"
+                     type="error"
+                     :value="true"
+                     v-html="error" />
 
-              <v-btn class="cyan"
-                     :disabled="errors.items.length > 0"
-                     @click="register">Register</v-btn>
-              <v-btn @click="clear">clear</v-btn>
-            </v-form>
-          </div>
+            <v-btn class="cyan"
+                   :disabled="errors.items.length > 0"
+                   @click="register">Register</v-btn>
+            <v-btn @click="clear">clear</v-btn>
+          </v-form>
         </div>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </div>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

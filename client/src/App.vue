@@ -2,6 +2,14 @@
   <div id="app">
     <v-app light>
       <page-header></page-header>
+      <v-toolbar color="indigo"
+                 class="cyan"
+                 dark
+                 fixed
+                 app>
+        <v-toolbar-side-icon @click.stop="toggleDrawer"></v-toolbar-side-icon>
+        <v-toolbar-title>Voting App</v-toolbar-title>
+      </v-toolbar>
       <v-content>
         <v-container fluid>
           <router-view/>
@@ -16,6 +24,12 @@ import PageHeader from '@/components/Header';
 
 export default {
   name: 'App',
+  methods: {
+    toggleDrawer() {
+      let newDrawer = !this.$store.state.drawer;
+      this.$store.dispatch('toggleDrawer', newDrawer);
+    },
+  },
   components: {
     PageHeader,
   },
