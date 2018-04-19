@@ -48,6 +48,11 @@
                             autocomplete="new-password"
                             required>
               </v-text-field>
+              <v-alert v-if="error !== null"
+                       type="error"
+                       :value="true"
+                       v-html="error" />
+
               <v-btn class="cyan"
                      :disabled="errors.items.length > 0"
                      @click="register">Register</v-btn>
@@ -71,6 +76,7 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
+      error: null,
     };
   },
   methods: {
@@ -85,10 +91,14 @@ export default {
         console.log('response', response);
       } catch (error) {
         console.log('error', error);
+        this.error =
+          error.response.data.error.msg ||
+          'An error has occured, please try again later';
       }
     },
     clear() {
       this.$refs.form.reset();
+      this.error = null;
     },
   },
 };
