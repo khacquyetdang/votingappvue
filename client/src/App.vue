@@ -8,7 +8,10 @@
                  fixed
                  app>
         <v-toolbar-side-icon @click.stop="toggleDrawer"></v-toolbar-side-icon>
-        <v-toolbar-title>Voting App</v-toolbar-title>
+        <v-toolbar-title @click="goHome"
+                         class="pointer">
+          Voting App
+        </v-toolbar-title>
       </v-toolbar>
       <v-content>
         <v-container fluid>
@@ -29,6 +32,11 @@ export default {
       const newDrawer = !this.$store.state.drawer;
       this.$store.dispatch('toggleDrawer', newDrawer);
     },
+    goHome() {
+      this.$router.push({
+        name: 'home',
+      });
+    },
   },
   components: {
     PageHeader,
@@ -44,5 +52,8 @@ export default {
   text-align: center;
   color: white;
   margin-top: 60px;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>

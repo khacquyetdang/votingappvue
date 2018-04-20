@@ -4,8 +4,7 @@
                        enable-resize-watcher
                        app
                        light>
-    <v-list v-if="!$store.state.isUserLoggedIn"
-            class="pt-0"
+    <v-list class="pt-0"
             dense>
       <v-list-tile v-for="item in items"
                    :key="item.title"
@@ -16,11 +15,8 @@
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-    </v-list>
-    <v-list v-else
-            class="pt-0"
-            dense>
-      <v-list-tile @click="logout">
+      <v-list-tile v-if="$store.state.isUserLoggedIn"
+                   @click="logout">
         <v-list-tile-content>
           <v-list-tile-title>
             <h3>Sign out </h3>
@@ -77,7 +73,8 @@ export default {
   },
   computed: {
     items() {
-      if (!this.$store.state.isUserLogin) {
+      let isUserLoggedIn = this.$store.state.isUserLoggedIn;
+      if (!isUserLoggedIn) {
         return [
           {
             title: 'Sign In',
@@ -91,7 +88,13 @@ export default {
           },
         ];
       }
-      return [];
+      return [
+        {
+          title: 'Create poll',
+          path: '/poll/create',
+          items: [],
+        },
+      ];
     },
     drawer: {
       get() {

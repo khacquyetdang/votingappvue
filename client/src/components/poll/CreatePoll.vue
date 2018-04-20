@@ -77,7 +77,7 @@ export default {
       options: [],
       option: null,
       error: null,
-      success: true,
+      success: false,
     };
   },
   methods: {
