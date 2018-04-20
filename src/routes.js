@@ -3,6 +3,7 @@ const request = require('request');
 var i18n = require('i18n');
 const userController = require('./controllers/user');
 const photoController = require('./controllers/photo');
+const pollController = require('./controllers/poll');
 const jwtconfig = require('./config/config.json');
 const passport = require('passport');
 var jwt = require('express-jwt');
@@ -228,6 +229,17 @@ module.exports = app => {
     '/api/logout',
     [jwtCheck, isAuthenticatedWithJwtToken],
     userController.logout,
+  );
+
+  app.post(
+    '/api/poll/create',
+    [jwtCheck, isAuthenticatedWithJwtToken],
+    pollController.create,
+  );
+
+  app.get(
+    '/api/poll/list',
+    pollController.list,
   );
   /* app.post('/api/signup', function (req, res, next) {
     res.send('hello postvcefd');
