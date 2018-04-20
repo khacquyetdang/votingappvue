@@ -65,6 +65,7 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService';
+import { saveTokenStorage } from '@/localStorage';
 
 export default {
   name: 'Register',
@@ -86,6 +87,7 @@ export default {
           confirmPassword: this.confirmPassword,
         });
         this.$store.dispatch('setToken', response.data.access_token);
+        saveTokenStorage(response.data.access_token);
         console.log('response', response);
       } catch (error) {
         console.log('error', error);

@@ -66,6 +66,8 @@
   </v-toolbar>
 
 */
+import { saveTokenStorage } from '@/localStorage';
+
 export default {
   name: 'PageHeader',
   data() {
@@ -102,6 +104,7 @@ export default {
   },
   methods: {
     logout() {
+      saveTokenStorage(null);
       this.$store.dispatch('setToken', null);
       this.$router.push({
         name: 'login',

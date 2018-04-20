@@ -51,7 +51,7 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService';
-
+import { saveTokenStorage } from '@/localStorage';
 export default {
   name: 'Login',
   data() {
@@ -72,7 +72,7 @@ export default {
         this.$router.push({
           name: 'home',
         });
-
+        saveTokenStorage(response.data.access_token);
         console.log('response', response);
       } catch (error) {
         console.log('error', error.response);

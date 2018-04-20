@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import { loadTokenStorage } from '../localStorage';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
   state: {
-    token: null,
+    token: loadTokenStorage(),
     drawer: null,
     // user: null,
-    isUserLoggedIn: false,
+    isUserLoggedIn: loadTokenStorage() !== null,
   },
 
   mutations: {
