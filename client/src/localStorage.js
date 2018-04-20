@@ -10,7 +10,5 @@ export const loadTokenStorage = () => {
 };
 
 export const saveTokenStorage = (token) => {
-  try {
-    localStorage.setItem(TOKEN_KEY, token);
-  } catch (err) {}
+  localStorage.setItem(TOKEN_KEY, token);
 };

@@ -26,7 +26,7 @@ export default {
   name: 'App',
   methods: {
     toggleDrawer() {
-      let newDrawer = !this.$store.state.drawer;
+      const newDrawer = !this.$store.state.drawer;
       this.$store.dispatch('toggleDrawer', newDrawer);
     },
   },

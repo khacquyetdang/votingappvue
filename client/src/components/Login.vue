@@ -52,6 +52,7 @@
 <script>
 import AuthenticationService from '@/services/AuthenticationService';
 import { saveTokenStorage } from '@/localStorage';
+
 export default {
   name: 'Login',
   data() {

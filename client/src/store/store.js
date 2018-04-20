@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { loadTokenStorage } from '../localStorage';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -8,6 +9,7 @@ export default new Vuex.Store({
   state: {
     token: loadTokenStorage(),
     drawer: null,
+    polls: null,
     // user: null,
     isUserLoggedIn: loadTokenStorage() !== null,
   },
@@ -21,16 +23,22 @@ export default new Vuex.Store({
         state.isUserLoggedIn = false;
       }
     },
+    setPolls(state, polls) {
+      state.polls = polls;
+    },
     toggleDrawer(state, drawer) {
       state.drawer = drawer;
-    }
+    },
   },
   actions: {
+    setPolls({ commit }, polls) {
+      commit('setPolls', polls);
+    },
     setToken({ commit }, token) {
       commit('setToken', token);
     },
-    toggleDrawer({commit }, drawer) {
-      commit('toggleDrawer', drawer);      
-    }
+    toggleDrawer({ commit }, drawer) {
+      commit('toggleDrawer', drawer);
+    },
   },
 });
