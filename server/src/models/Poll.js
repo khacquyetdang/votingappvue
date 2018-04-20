@@ -6,7 +6,7 @@ var choiceSchema = new mongoose.Schema({
   votes: [voteSchema],
 });
 var PollSchema = new mongoose.Schema({
-  ownerId: { type: ObjectId, ref: 'User', required: true },
+  owner: { type: ObjectId, ref: 'User', required: true },
   question: { type: String, required: true },
   choices: [choiceSchema],
 });

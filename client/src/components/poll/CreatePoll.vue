@@ -47,9 +47,8 @@
           </v-form>
         </div>
       </div>
-      <v-snackbar 
-        v-if="success"
-        :timeout="3000"
+      <v-snackbar v-if="success"
+                  :timeout="3000"
                   :top="true"
                   :bottom="false"
                   :right="false"

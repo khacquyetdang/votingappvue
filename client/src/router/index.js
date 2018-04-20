@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
+import ListPoll from '@/components/poll/List';
 
 Vue.use(Router);
 
@@ -29,5 +30,10 @@ export default new Router({
       name: 'createpoll',
       component: CreatePoll,
     },
+    {
+      path: '/polls',
+      name: 'ListPoll',
+      component: ListPoll,
+    }
   ],
 });

@@ -2,7 +2,9 @@ const Poll = require('../models/Poll');
 
 // JSON API for list of polls
 exports.list = function (req, res) {
-  Poll.find({}, 'question', function (error, polls) {
+  Poll.find({}, ['owner', 'question', 'choices'])
+  .populate('owner', 'email')
+  .exec(function (error, polls) {
     res.send({
       polls: polls,
     });
@@ -63,7 +65,7 @@ exports.create = function (req, res) {
   console.log("create polls req question", question);
   console.log("create polls req typeof choice ", (typeof choices));
   var pollObj = {
-    ownerId: userid,
+    owner: userid,
     question: question,
     choices: choices,
   };
