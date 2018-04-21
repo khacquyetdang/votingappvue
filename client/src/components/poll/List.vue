@@ -1,16 +1,8 @@
 <template>
-  <v-container fluid
-               grid-list-md
-               text-xs-center>
-    <v-layout row
-              wrap>
-      <v-flex v-for="(poll, index) in $store.state.polls"
-              :key="index"
-              xs12
-              sm6
-              md3
-              class="pollItem">
-        <div class="white elevation-3  mt-1 ml-1">
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <v-flex v-for="(poll, index) in $store.state.polls" :key="index" md4>
+        <v-card class="mx-1">
           <div>
             <h2>{{ poll.question }}</h2>
           </div>
@@ -21,7 +13,7 @@
             Created by:
           </div>
           <div class="owner">{{ poll.owner.email}}</div>
-        </div>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -61,8 +53,8 @@ export default {
 <style scoped>
 .container {
   color: #0080ff;
-}
-.pollItem {
+  margin: 0px;
+  padding: 16px;
 }
 .owner {
   color: gray;
