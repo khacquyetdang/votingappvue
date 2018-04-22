@@ -10,12 +10,13 @@ export default new Vuex.Store({
     token: loadTokenStorage(),
     drawer: null,
     polls: null,
+    pollsbyId: new Map(),
     // user: null,
     isUserLoggedIn: loadTokenStorage() !== null,
   },
 
   mutations: {
-    setToken(state, token) {
+    setToken: function(state, token) {
       state.token = token;
       if (token) {
         state.isUserLoggedIn = true;
@@ -23,21 +24,24 @@ export default new Vuex.Store({
         state.isUserLoggedIn = false;
       }
     },
-    setPolls(state, polls) {
+    setPolls: function(state, polls) {
       state.polls = polls;
+      polls.forEach(poll => {
+        state.pollsbyId.set(poll._id, poll);
+      });
     },
-    toggleDrawer(state, drawer) {
+    toggleDrawer: function(state, drawer) {
       state.drawer = drawer;
     },
   },
   actions: {
-    setPolls({ commit }, polls) {
+    setPolls: function({ commit }, polls) {
       commit('setPolls', polls);
     },
-    setToken({ commit }, token) {
+    setToken: function({ commit }, token) {
       commit('setToken', token);
     },
-    toggleDrawer({ commit }, drawer) {
+    toggleDrawer: function({ commit }, drawer) {
       commit('toggleDrawer', drawer);
     },
   },

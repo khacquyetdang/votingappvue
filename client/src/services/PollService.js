@@ -1,11 +1,10 @@
 import Api from '@/services/Api';
 
 export default {
-  createPoll(poll) {
+  createPoll: function(poll) {
     return Api().post('/poll/create', poll);
   },
-  list() {
+  list: function() {
     return Api().get('/poll/list');
   },
-
 };

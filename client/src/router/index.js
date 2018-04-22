@@ -5,6 +5,7 @@ import Register from '@/components/Register';
 import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
 import ListPoll from '@/components/poll/List';
+import PollDetail from '@/components/poll/Detail';
 
 Vue.use(Router);
 
@@ -34,6 +35,12 @@ export default new Router({
       path: '/polls',
       name: 'ListPoll',
       component: ListPoll,
-    }
+    },
+    {
+      path: '/polls/:id',
+      name: 'polldetail',
+      component: PollDetail,
+      props: true,
+    },
   ],
 });
