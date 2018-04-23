@@ -10,4 +10,10 @@ export default {
   pollDetail: function(pollid) {
     return Api().get('/poll/detail', { params: { pollid: pollid } });
   },
+  vote: function(pollid, choiceId) {
+    return Api().put('/poll/vote', {
+      pollId: pollid,
+      choiceId: choiceId,
+    });
+  },
 };

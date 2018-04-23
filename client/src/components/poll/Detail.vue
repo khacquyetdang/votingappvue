@@ -5,10 +5,11 @@
                 <h1>
                     {{ poll.question}}</h1>
                 <pie-chart :chart-data="datacollection" :options="pieoptions"></pie-chart>
-                <v-btn v-for="(label, index) in datacollection.labels" :key="index" :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }">{{ label }}</v-btn>
+                <v-btn v-for="(label, index) in datacollection.labels" :key="index" :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }" @click="() => vote(choiceIdByIndex(index))">{{ label }}
+                </v-btn>
                 <v-snackbar v-if=" success" :timeout=" 3000" :top=" true" :bottom=" false" :right=" false" :left=" false" :multiline=" false" :vertical=" false" v-model="success">
-                    The poll is created
-                    <v-btn flat="flat" color="pink" @click.native="success = false">Close</v-btn>
+                    "The poll is created"
+                    <v-btn flat="flat" color="pink" @click.native="success = false">close</v-btn>
                 </v-snackbar>
             </div>
         </v-flex>
@@ -41,6 +42,14 @@
             this.getPoll();
         },
         methods: {
+            choiceIdByIndex(index) {
+                try {
+                    return this.poll.choices[index]._id
+                } catch (error) {
+                    console.log('error', index);
+                }
+                return null;
+            },
             async getPoll() {
                 try {
                     const response = await PollService.pollDetail(this.$props['id']);
@@ -49,6 +58,18 @@
                     this.fillData();
                 } catch (error) {
                     this.error = error.response.data.error.msg || 'An error has occured, please try again later';
+                }
+            },
+            async vote(choiceId) {
+                try {
+                    console.log("vote choiId", choiceId);
+                    const response = await PollService.vote(this.$props['id'], choiceId);
+                    console.log('poll detail response', response);
+                    this.poll = response.data.poll;
+                    this.fillData();
+                } catch (error) {
+                    this.error = error.response.data.error.msg || 'An error has occured, please try again later';
+
                 }
             },
             fillData() {
