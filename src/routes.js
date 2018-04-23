@@ -239,6 +239,8 @@ module.exports = app => {
 
   app.get('/api/poll/list', pollController.list);
   app.get('/api/poll/detail', pollController.poll);
+  app.put('/api/poll/vote', pollController.vote);
+
   /* app.post('/api/signup', function (req, res, next) {
     res.send('hello postvcefd');
   }); */

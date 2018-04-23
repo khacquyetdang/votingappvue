@@ -1,5 +1,8 @@
 const HttpStatus = require('http-status-codes');
+var jwt = require('jsonwebtoken');
 const Poll = require('../models/Poll');
+const config = require('../config/config.json');
+const utils = require('../utils/index');
 
 // JSON API for list of polls
 exports.list = function(req, res) {
@@ -54,11 +57,27 @@ exports.poll = function(req, res) {
 
 // JSON API for getting a single poll
 exports.vote = function(req, res) {
-  var pollId = req.params.id;
-  var choiceId = req.params.choice;
+  var pollId = req.body.pollId;
+  var choiceId = req.body.choiceId;
+  var userId = null;
+  var token = utils.getTokenFromReq(req);
+  console.log('token ', token);
+  if (token) {
+    try {
+      var decoded = jwt.verify(token, config.secret);
+      console.log('decoded', decoded);
+      userId = decoded.userid;
+    } catch (error) {
+      console.log('error ', error);
+    }
+  }
+  const ip = req.header('x-forwarded-for') || req.ip;
   Poll.findById(pollId, function(err, poll) {
-    var choice = poll.choices.id(req.params.choiceId);
-    choice.votes.push({ ip: ip, user_id: null });
+    var choice = poll.choices.id(choiceId);
+    if (!choice.votes) {
+      choice.votes = [];
+    }
+    choice.votes.push({ ip: ip, user_id: userId });
     poll.save(function(err, doc) {
       if (err) {
         return res.status(HttpStatus.CONFLICT).send({
