@@ -5,7 +5,8 @@
                 <h1>
                     {{ poll.question}}</h1>
                 <pie-chart :chart-data="datacollection" :options="pieoptions"></pie-chart>
-                <v-snackbar v-if="success" :timeout="3000" :top="true" :bottom="false" :right="false" :left="false" :multiline="false" :vertical="false" v-model="success">
+                <v-btn v-for="(label, index) in datacollection.labels" :key="index" :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }">{{ label }}</v-btn>
+                <v-snackbar v-if=" success" :timeout=" 3000" :top=" true" :bottom=" false" :right=" false" :left=" false" :multiline=" false" :vertical=" false" v-model="success">
                     The poll is created
                     <v-btn flat="flat" color="pink" @click.native="success = false">Close</v-btn>
                 </v-snackbar>
@@ -37,10 +38,19 @@
             };
         },
         mounted() {
-            this.fillData();
-            this.poll = this.$store.state.pollsbyId.get(this.$props['id']);
+            this.getPoll();
         },
         methods: {
+            async getPoll() {
+                try {
+                    const response = await PollService.pollDetail(this.$props['id']);
+                    console.log('poll detail response', response);
+                    this.poll = response.data;
+                    this.fillData();
+                } catch (error) {
+                    this.error = error.response.data.error.msg || 'An error has occured, please try again later';
+                }
+            },
             fillData() {
                 if (this.poll) {
                     let labels = [];
@@ -49,7 +59,7 @@
                     this.poll.choices.forEach((choice) => {
                         labels.push(choice.text);
                         backgroundColor.push(randomColor());
-                        data.push(choice.votes.length + 1);
+                        data.push(choice.votes.length);
                     });
                     this.datacollection = {
                         labels: labels,
