@@ -23,8 +23,8 @@
 
     export default {
         name: 'App',
-        data: {
-            error: null
+        data() {
+            return {error: null}
         },
         methods: {
             toggleDrawer() {

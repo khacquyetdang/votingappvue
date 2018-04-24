@@ -9,6 +9,8 @@ export const loadTokenStorage = () => {
   }
 };
 
-export const saveTokenStorage = (token) => {
-  localStorage.setItem(TOKEN_KEY, token);
+export const saveTokenStorage = token => {
+  token
+    ? localStorage.setItem(TOKEN_KEY, token)
+    : localStorage.removeItem(TOKEN_KEY);
 };

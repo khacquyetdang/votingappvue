@@ -22,9 +22,7 @@
     import randomColor from 'randomcolor';
     export default {
         name: 'PollDetail',
-        props: [
-            'id', 'poll'
-        ],
+        props: ['id'],
         components: {
             PieChart
         },

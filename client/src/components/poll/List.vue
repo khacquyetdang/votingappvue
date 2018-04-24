@@ -2,7 +2,7 @@
     <v-layout justify-center="justify-center">
         <v-container grid-list-md="grid-list-md" text-xs-center="text-xs-center">
             <v-layout row="row" wrap="wrap">
-                <v-flex v-for="(poll, index) in $store.state.polls" :key="index" md4="md4">
+                <v-flex v-for="(poll, index) in polls" :key="index" md4="md4">
                     <v-card class="mx-1" color="blue-grey lighten-5">
                         <div>
                             <h2>{{ poll.question }}</h2>
@@ -27,11 +27,9 @@
     export default {
         name: 'ListPoll',
         data() {
-            return {error: null};
+            return {error: null, polls: []};
         },
-        created: function () {
-            this.getPolls();
-        },
+
         methods: {
             viewPoll(poll) {
                 console.log("view poll", poll);
@@ -50,10 +48,18 @@
                     console.log('polls response', response);
                     let polls = response.data.polls;
                     this.$store.dispatch('setPolls', polls);
+                    this.polls = polls;
                 } catch (error) {
                     this.error = error.response.data.error.msg || 'An error has occured, please try again later';
                 }
             }
+        },
+        created() {
+            console.log("created");
+        },
+        mounted() {
+            console.log("mounted");
+            this.getPolls();
         }
     };
 </script>

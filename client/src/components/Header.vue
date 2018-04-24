@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher="enable-resize-watcher" app="app" light="light">
+    <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher="enable-resize-watcher" disable-route-watcher="disable-route-watcher" app="app" light="light">
         <v-list class="pt-0" dense="dense">
             <v-list-tile v-for="item in items" :key="item.title" :to="item.path">
                 <v-list-tile-content>
@@ -63,6 +63,9 @@
         data() {
             return {clipped: false};
         },
+        mounted() {
+            this.drawer = false;
+        },
         computed: {
             items() {
                 const isUserLoggedIn = this.$store.state.isUserLoggedIn;
@@ -75,6 +78,10 @@
                         }, {
                             title: 'Sign Up',
                             path: '/register',
+                            items: []
+                        }, {
+                            title: 'Poll list',
+                            path: '/polls',
                             items: []
                         }
                     ];
