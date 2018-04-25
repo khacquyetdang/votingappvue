@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
+import HomePage from '@/components/HomePage';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
@@ -14,7 +14,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: HelloWorld,
+      component: HomePage,
     },
     {
       path: '/register',
