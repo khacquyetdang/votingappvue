@@ -1,15 +1,34 @@
 <template>
-    <v-layout row="row" wrap="wrap" class="piechartdetail">
-        <v-flex xs12="xs12" sm12="sm12" md12="md12">
+    <v-layout row="row"
+        wrap="wrap"
+        class="piechartdetail">
+        <v-flex xs12="xs12"
+            sm12="sm12"
+            md12="md12">
             <div v-if="poll">
                 <h1>
                     {{ poll.question}}</h1>
-                <pie-chart :chart-data="datacollection" :options="pieoptions"></pie-chart>
-                <v-btn v-for="(label, index) in datacollection.labels" :key="index" :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }" @click="() => vote(choiceIdByIndex(index))">{{ label }}
+                <pie-chart :chart-data="datacollection"
+                    :options="pieoptions"></pie-chart>
+                <v-btn v-for="(label, index) in datacollection.labels"
+                    :key="index"
+                    :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }"
+            
+                    @click="() => vote(choiceIdByIndex(index))">{{ label }}
                 </v-btn>
-                <v-snackbar v-if=" success" :timeout=" 3000" :top=" true" :bottom=" false" :right=" false" :left=" false" :multiline=" false" :vertical=" false" v-model="success">
+                <v-snackbar v-if=" success"
+                    :timeout=" 3000"
+                    :top=" true"
+                    :bottom=" false"
+                    :right=" false"
+                    :left=" false"
+                    :multiline=" false"
+                    :vertical=" false"
+                    v-model="success">
                     "The poll is created"
-                    <v-btn flat="flat" color="pink" @click.native="success = false">close</v-btn>
+                    <v-btn flat="flat"
+                        color="pink"
+                        @click.native="success = false">close</v-btn>
                 </v-snackbar>
             </div>
         </v-flex>
@@ -26,7 +45,7 @@
         components: {
             PieChart
         },
-        data() {
+        data () {
             return {
                 datacollection: null,
                 poll: null,
@@ -36,11 +55,11 @@
                 }
             };
         },
-        mounted() {
+        mounted () {
             this.getPoll();
         },
         methods: {
-            choiceIdByIndex(index) {
+            choiceIdByIndex (index) {
                 try {
                     return this.poll.choices[index]._id
                 } catch (error) {
@@ -48,7 +67,7 @@
                 }
                 return null;
             },
-            async getPoll() {
+            async getPoll () {
                 try {
                     const response = await PollService.pollDetail(this.$props['id']);
                     console.log('poll detail response', response);
@@ -58,7 +77,7 @@
                     this.error = error.response.data.error.msg || 'An error has occured, please try again later';
                 }
             },
-            async vote(choiceId) {
+            async vote (choiceId) {
                 try {
                     console.log("vote choiId", choiceId);
                     const response = await PollService.vote(this.$props['id'], choiceId);
@@ -70,7 +89,7 @@
 
                 }
             },
-            fillData() {
+            fillData () {
                 if (this.poll) {
                     let labels = [];
                     let backgroundColor = [];
@@ -97,26 +116,26 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="scoped">
-    .piechartdetail {
-        color: #424242;
-    }
+.piechartdetail {
+  color: #424242;
+}
 
-    h1,
-    h2 {
-        font-weight: normal;
-    }
+h1,
+h2 {
+  font-weight: normal;
+}
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
+ul {
+  list-style-type: none;
+  padding: 0;
+}
 
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
 
-    a {
-        color: #42b983;
-    }
+a {
+  color: #42b983;
+}
 </style>

@@ -67,7 +67,7 @@ module.exports = {
   rules: {
     'max-len': [
       2,
-      140,
+      180,
       4,
       {
         ignoreUrls: true,
