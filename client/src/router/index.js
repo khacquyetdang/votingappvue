@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HomePage from '@/components/HomePage';
+import AboutPage from '@/components/About';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
@@ -12,9 +12,9 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomePage,
+      path: '/about',
+      name: 'about',
+      component: AboutPage,
     },
     {
       path: '/register',
@@ -32,8 +32,8 @@ export default new Router({
       component: CreatePoll,
     },
     {
-      path: '/polls',
-      name: 'ListPoll',
+      path: '/',
+      name: 'polls',
       component: ListPoll,
     },
     {

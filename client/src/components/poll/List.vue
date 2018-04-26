@@ -1,13 +1,19 @@
 <template>
     <v-layout justify-center="justify-center">
-        <v-container grid-list-md="grid-list-md" text-xs-center="text-xs-center">
-            <v-layout row="row" wrap="wrap">
-                <v-flex v-for="(poll, index) in polls" :key="index" md4="md4">
-                    <v-card class="mx-1" color="blue-grey lighten-5">
+        <v-container grid-list-md="grid-list-md"
+            text-xs-center="text-xs-center">
+            <v-layout row="row"
+                wrap="wrap">
+                <v-flex v-for="(poll, index) in polls"
+                    :key="index"
+                    md4="md4">
+                    <v-card class="mx-1"
+                        color="blue-grey lighten-5">
                         <div>
                             <h2>{{ poll.question }}</h2>
                         </div>
-                        <v-btn color="info" @click="() => viewPoll(poll)">
+                        <v-btn color="info"
+                            @click="() => viewPoll(poll)">
                             View poll
                         </v-btn>
                         <div class="owner">
@@ -26,12 +32,12 @@
 
     export default {
         name: 'ListPoll',
-        data() {
-            return {error: null, polls: []};
+        data () {
+            return { error: null, polls: this.$store.polls };
         },
 
         methods: {
-            viewPoll(poll) {
+            viewPoll (poll) {
                 console.log("view poll", poll);
                 const pollId = poll._id;
                 this.$router.push({
@@ -42,7 +48,7 @@
                     }
                 });
             },
-            async getPolls() {
+            async getPolls () {
                 try {
                     const response = await PollService.list();
                     console.log('polls response', response);
@@ -54,44 +60,48 @@
                 }
             }
         },
-        created() {
+        created () {
             console.log("created");
         },
-        mounted() {
+        mounted () {
             console.log("mounted");
             this.getPolls();
+        },
+        updated () {
+            console.log("updated");
+
         }
     };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="scoped">
-    .container {
-        color: #0080ff;
-        margin: 0;
-        padding: 16px;
-    }
-    @media only screen and (max-width: 599px) {
-        .container {
-            padding: 2px;
-        }
-    }
-    .owner {
-        color: gray;
-    }
-    h1,
-    h2 {
-        font-weight: normal;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-    a {
-        color: #42b983;
-    }
+.container {
+  color: #0080ff;
+  margin: 0;
+  padding: 16px;
+}
+@media only screen and (max-width: 599px) {
+  .container {
+    padding: 2px;
+  }
+}
+.owner {
+  color: gray;
+}
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
 </style>

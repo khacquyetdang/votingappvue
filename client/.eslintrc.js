@@ -1,5 +1,6 @@
-module.exports = {
+/*module.exports = {
   parserOptions: {
+    parser: 'babel-eslint',
     ecmaVersion: 2017,
   },
   extends: [
@@ -18,5 +19,62 @@ module.exports = {
         baseIndent: 1,
       },
     ],
+  },
+};
+*/
+/*
+module.exports = {
+  // https://github.com/prettier/eslint-config-prettier
+  //extends: ['plugin:prettier/recommended'],
+  root: true,
+  parserOptions: {
+    sourceType: 'module',
+    parser: 'babel-eslint',
+  },
+  env: {
+    browser: true,
+  },
+  extends: [
+    'plugin:vue/essential',
+    'plugin:prettier/recommended',
+    'eslint:recommended',
+  ],
+  rules: {
+    'prettier/prettier': 'error',
+  },
+};*/
+
+module.exports = {
+  root: true,
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 2017,
+    parser: 'babel-eslint',
+  },
+  env: {
+    browser: true,
+  },
+  extends: [
+    'plugin:vue/essential',
+    /*,
+    'standard',
+    'prettier',
+    'prettier/standard',
+    'plugin:vue/essential',
+    'plugin:vue/recommended',*/
+  ],
+  plugins: ['vue', 'prettier'],
+  rules: {
+    'max-len': [
+      2,
+      140,
+      4,
+      {
+        ignoreUrls: true,
+        ignoreTemplateLiterals: true,
+        ignoreStrings: true,
+      },
+    ],
+    /*'prettier/prettier': 'error',*/
   },
 };
