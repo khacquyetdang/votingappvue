@@ -5,24 +5,25 @@ const config = require('../config/config.json');
 const utils = require('../utils/index');
 
 // JSON API for list of polls
-exports.list = function (req, res) {
+exports.list = function(req, res) {
   Poll.find({}, ['owner', 'question', 'choices'])
     .populate('owner', 'email')
-    .exec(function (error, polls) {
+    .exec(function(error, polls) {
       res.send({
         polls: polls,
       });
     });
 };
 // JSON API for getting a single poll
-exports.poll = function (req, res) {
+exports.poll = function(req, res) {
   var pollId = req.query.pollid;
   Poll.findById(
     pollId,
-    '', {
+    '',
+    {
       lean: true,
     },
-    function (err, poll) {
+    function(err, poll) {
       if (poll) {
         var userVoted = false,
           userChoice,
@@ -55,11 +56,12 @@ exports.poll = function (req, res) {
 };
 
 // JSON API for getting a single poll
-exports.vote = function (req, res) {
-  var pollId = req.body.pollId;
-  var choiceId = req.body.choiceId;
-  var userId = null;
-  var token = utils.getTokenFromReq(req);
+exports.vote = function(req, res) {
+  let pollId = req.body.pollId;
+  let choiceId = req.body.choiceId;
+  let newChoice = req.body.newChoice;
+  let userId = null;
+  let token = utils.getTokenFromReq(req);
   console.log('token ', token);
   if (token) {
     try {
@@ -72,35 +74,59 @@ exports.vote = function (req, res) {
   }
   const ip = req.header('x-forwarded-for') || req.ip;
 
-  Poll.update({
+  Poll.update(
+    {
       _id: pollId,
-      "choices.votes.user_id": userId,
-      "choices.votes.ip": ip
-    }, {
-      $pull: {
-        "choices.$.votes": {
-          ip: ip,
-          user_id: userId
-        }
-      }
-    }, {
-      multi: true
+      'choices.votes.user_id': userId,
+      'choices.votes.ip': ip,
     },
-    function (err, pollupdated) {
-      if (err) {
-        console.log("error", err);
-      }
-      console.log("pollupdated", pollupdated);
-      Poll.findById(pollId, function (err, poll) {
-        var choice = poll.choices.id(choiceId);
-        if (!choice.votes) {
-          choice.votes = [];
-        }
-        choice.votes.push({
+    {
+      $pull: {
+        'choices.$.votes': {
           ip: ip,
-          user_id: userId
-        });
-        poll.save(function (err, doc) {
+          user_id: userId,
+        },
+      },
+    },
+    {
+      multi: true,
+    },
+    function(err, pollupdated) {
+      if (err) {
+        console.log('error', err);
+      }
+      console.log('pollupdated', pollupdated);
+      Poll.findById(pollId, function(err, poll) {
+        let choice;
+        if (choiceId) {
+          choice = poll.choices.id(choiceId);
+          if (!choice) {
+            return res.status(HttpStatus.BAD_REQUEST).send({
+              error: {
+                msg: 'The request params is not correct.',
+              },
+            });
+          }
+          if (!choice.votes) {
+            choice.votes = [];
+          }
+          choice.votes.push({
+            ip: ip,
+            user_id: userId,
+          });
+        } else if (newChoice) {
+          choice = {
+            text: newChoice,
+            votes: [
+              {
+                ip: ip,
+                user_id: userId,
+              },
+            ],
+          };
+          poll.choices.push(choice);
+        }
+        poll.save(function(err, doc) {
           if (err) {
             return res.status(HttpStatus.CONFLICT).send({
               error: {
@@ -125,7 +151,7 @@ exports.vote = function (req, res) {
                 theDoc.userVoted = true;
                 theDoc.userChoice = {
                   _id: choice._id,
-                  text: choice.text
+                  text: choice.text,
                 };
               }
             }
@@ -135,16 +161,17 @@ exports.vote = function (req, res) {
           });
         });
       });
-    });
+    },
+  );
 };
 
 // JSON API for creating a new poll
-exports.create = function (req, res) {
+exports.create = function(req, res) {
   var userid = req.user.userid;
 
   console.log('create polls req body', req.body);
   var reqBody = req.body;
-  var choices = reqBody.choices.filter(function (v) {
+  var choices = reqBody.choices.filter(function(v) {
     return v.text != '';
   });
   choices = choices.map(choice => {
@@ -163,7 +190,7 @@ exports.create = function (req, res) {
     choices: choices,
   };
   var poll = new Poll(pollObj);
-  poll.save(function (err, doc) {
+  poll.save(function(err, doc) {
     if (err || !doc) {
       console.log('err', err);
       console.log('doc', doc);

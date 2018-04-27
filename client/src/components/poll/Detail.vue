@@ -10,44 +10,54 @@
             <div v-if="poll">
                 <h1>
                     {{ poll.question}}</h1>
-                <pie-chart :chart-data="datacollection"
-                    :options="pieoptions"></pie-chart>
                 <v-layout row
                     justify-center
                     align-center>
-                    <v-btn v-for="(label, index) in datacollection.labels"
+                    <pie-chart :chart-data="datacollection"
+                        :options="pieoptions"></pie-chart>
+                </v-layout>
+                <v-layout justify-center
+                    align-center
+                    row
+                    wrap>
+                    <v-btn sm6
+                        v-for="(label, index) in datacollection.labels"
+                
                         :key="index"
                         :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }"
                 
                         @click="() => vote(choiceIdByIndex(index))">{{ label }}
                     </v-btn>
                 </v-layout>
-                <v-flex md6
+                <v-flex md4
                     xs12
                     sm12
-                    offset-md3>
-                    <v-text-field placeholder="New choice"
-                        v-model="newchoice"
-                        :rules="newchoiceRules"
-                        solo
-                        required
-                        append-icon="send"
-                        class="newchoice"></v-text-field>
+                    offset-md4>
+                    <v-form autocomplete="off"
+                        ref="form"
+                        lazy-validation="lazy-validation">
+
+                        <v-text-field placeholder="New choice"
+                            v-model="newchoice"
+                            data-vv-name="newchoice"
+                            v-validate="'required|min:6'"
+                            data-vv-delay="100"
+                            data-vv-rules="required"
+                            solo
+                            required
+                            append-icon="send"
+                            :append-icon-cb="newchoiceSend"
+                            :error-messages="errors.collect('newchoice')"
+                    
+                            class="newchoice"></v-text-field>
+                        <v-alert class="error"
+                            v-if="error !== null"
+                            type="error"
+                            :value="true"
+                            v-html="error" />
+
+                    </v-form>
                 </v-flex>
-                <v-snackbar v-if=" success"
-                    :timeout=" 3000"
-                    :top=" true"
-                    :bottom=" false"
-                    :right=" false"
-                    :left=" false"
-                    :multiline=" false"
-                    :vertical=" false"
-                    v-model="success">
-                    "The poll is created"
-                    <v-btn flat="flat"
-                        color="pink"
-                        @click.native="success = false">close</v-btn>
-                </v-snackbar>
             </div>
         </v-flex>
     </v-layout>
@@ -65,6 +75,8 @@
         },
         data () {
             return {
+                newchoice: null,
+                error: null,
                 datacollection: null,
                 poll: null,
                 pieoptions: {
@@ -76,7 +88,27 @@
         mounted () {
             this.getPoll();
         },
+        watch: {
+            newchoice: function (val) {
+                this.error = null;
+            }
+        },
         methods: {
+            newchoiceSend () {
+                this.newchoice = this.newchoice.trim();
+                if (this.newchoice === null || this.newchoice.length < 4) {
+                    this.error = "The new choice must have more than 3 characters."
+                } else {
+                    let elementExisted = this.poll.choices.some(function (choice) {
+                        return choice.text.trim().toLowerCase() === this.newchoice.toLowerCase();
+                    }.bind(this));
+                    if (elementExisted) {
+                        this.error = "This choice is already existed."
+                    } else {
+                        this.vote(null);
+                    }
+                }
+            },
             choiceIdByIndex (index) {
                 try {
                     return this.poll.choices[index]._id
@@ -98,10 +130,11 @@
             async vote (choiceId) {
                 try {
                     console.log("vote choiId", choiceId);
-                    const response = await PollService.vote(this.$props['id'], choiceId);
+                    const response = await PollService.vote(this.$props['id'], choiceId, this.newchoice);
                     console.log('poll detail response', response);
                     this.poll = response.data.poll;
                     this.fillData();
+                    this.newchoice = "";
                 } catch (error) {
                     this.error = error.response.data.error.msg || 'An error has occured, please try again later';
 
@@ -140,6 +173,9 @@
 .newchoice {
   border: solid #42a5f5 2px;
   border-radius: 8px;
+}
+.error {
+  padding: 4px;
 }
 
 h1,
