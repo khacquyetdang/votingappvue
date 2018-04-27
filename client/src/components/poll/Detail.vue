@@ -2,7 +2,7 @@
     <v-layout row="row"
         wrap="wrap"
         class="piechartdetail">
-        <v-flex xs12="xs12"
+        <v-flex xs12
             sm12="sm12"
             md12="md12">
             <div v-if="poll">
@@ -10,12 +10,28 @@
                     {{ poll.question}}</h1>
                 <pie-chart :chart-data="datacollection"
                     :options="pieoptions"></pie-chart>
-                <v-btn v-for="(label, index) in datacollection.labels"
-                    :key="index"
-                    :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }"
-            
-                    @click="() => vote(choiceIdByIndex(index))">{{ label }}
-                </v-btn>
+                <v-layout row
+                    justify-center
+                    align-center>
+                    <v-btn v-for="(label, index) in datacollection.labels"
+                        :key="index"
+                        :style="{ backgroundColor: datacollection.datasets[0].backgroundColor[index] }"
+                
+                        @click="() => vote(choiceIdByIndex(index))">{{ label }}
+                    </v-btn>
+                </v-layout>
+                <v-flex md6
+                    xs12
+                    sm12
+                    offset-md3>
+                    <v-text-field placeholder="New choice"
+                        v-model="newchoice"
+                        :rules="newchoiceRules"
+                        solo
+                        required
+                        append-icon="send"
+                        class="newchoice"></v-text-field>
+                </v-flex>
                 <v-snackbar v-if=" success"
                     :timeout=" 3000"
                     :top=" true"
@@ -118,6 +134,10 @@
 <style scoped="scoped">
 .piechartdetail {
   color: #424242;
+}
+.newchoice {
+  border: solid #42a5f5 2px;
+  border-radius: 8px;
 }
 
 h1,
