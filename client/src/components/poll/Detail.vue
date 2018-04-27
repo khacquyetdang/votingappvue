@@ -4,7 +4,9 @@
         class="piechartdetail">
         <v-flex xs12
             sm12="sm12"
-            md12="md12">
+            md12="md12"
+            justify-center
+            align-center>
             <div v-if="poll">
                 <h1>
                     {{ poll.question}}</h1>
