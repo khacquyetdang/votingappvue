@@ -37,7 +37,7 @@
                             append-icon="add"
                             :append-icon-cb="addPoll"></v-text-field>
 
-                        <v-alert v-if="error !== null"
+                        <v-alert v-if="error"
                             type="error"
                             :value="true"
                             v-html="error" />
@@ -74,6 +74,11 @@
         data () {
             return { question: null, options: [], option: null, error: null, success: false };
         },
+        watch: {
+            option (newVal) {
+                this.error = null;
+            }
+        },
         methods: {
             async createPoll (event) {
                 if (event)
@@ -96,6 +101,7 @@
                 } else {
                     this.error = 'You need to fill the poll options and the question in order to create poll';
                 }
+                this.$validator.reset();
                 console.log('create poll');
             },
             removePoll (i) {
@@ -105,8 +111,15 @@
             addPoll () {
                 console.log('add poll');
                 if (this.option !== null) {
-                    this.options.push(this.option);
-                    this.option = null;
+                    let optionExisted = this.options.some(function (optionItem) {
+                        return this.option.trim().toLowerCase() === optionItem.trim().toLowerCase();
+                    }.bind(this));
+                    if (optionExisted) {
+                        this.error = "This option is already existed";
+                    } else {
+                        this.options.push(this.option);
+                        this.option = null;
+                    }
                 }
             }
         }
