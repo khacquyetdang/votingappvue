@@ -15,6 +15,11 @@ export default new Vuex.Store({
     isUserLoggedIn: loadTokenStorage() !== null,
   },
 
+  getters: {
+    getPolls(state) {
+      return state.polls;
+    },
+  },
   mutations: {
     setToken: function(state, token) {
       state.token = token;

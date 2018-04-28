@@ -2,13 +2,35 @@
     <v-layout justify-center="justify-center">
         <v-container grid-list-md="grid-list-md"
             text-xs-center="text-xs-center">
+            <v-layout v-if="pollEmpty"
+                row="row"
+                justify-center
+                wrap="wrap">
+                <v-card raised="10">
+                    <v-card-title primary-title>
+                        <h3>There is no poll created. Please create
+                            your first poll
+                        </h3>
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-layout justify-center
+                            mt-1
+                            mb-2>
+                            <v-btn to="/poll/create"
+                                color="cyan">
+                                Create poll
+                            </v-btn>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+            </v-layout>
             <v-layout row="row"
                 wrap="wrap">
                 <v-flex v-for="(poll, index) in polls"
                     :key="index"
                     md4="md4">
                     <v-card class="mx-1"
-                        color="blue-grey lighten-5">
+                        color="lime lighten-5">
                         <div>
                             <h2>{{ poll.question }}</h2>
                         </div>
@@ -33,9 +55,16 @@
     export default {
         name: 'ListPoll',
         data () {
-            return { error: null, polls: this.$store.polls };
+            return { error: null };
         },
-
+        computed: {
+            pollEmpty () {
+                return !this.polls || this.polls.length === 0;
+            },
+            polls () {
+                return this.$store.getters.getPolls;
+            }
+        },
         methods: {
             viewPoll (poll) {
                 console.log("view poll", poll);
@@ -54,7 +83,7 @@
                     console.log('polls response', response);
                     let polls = response.data.polls;
                     this.$store.dispatch('setPolls', polls);
-                    this.polls = polls;
+                    // this.polls = polls;
                 } catch (error) {
                     this.error = error.response.data.error.msg || 'An error has occured, please try again later';
                 }
