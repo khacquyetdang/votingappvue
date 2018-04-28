@@ -14,7 +14,7 @@ export default {
     return Api().put('/poll/vote', {
       pollId: pollid,
       choiceId: choiceId,
-      newChoice: newChoice
+      newChoice: newChoice,
     });
   },
 };
