@@ -10,7 +10,7 @@ yarn-error.log*
 selenium-debug.log
 # env
 .env*
-*/*.env*
+*/.env*
 # Editor directories and files
 .idea
 .vscode
