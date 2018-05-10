@@ -97,6 +97,8 @@ app.use(cors(configCors.corsOptions));
 app.use(i18n.init);
 
 require('./routes')(app);
+
+app.use('/', express.static('public'));
 // get the intended host and port number, use localhost and port 3000 if not
 // provided
 const customHost = argv.host || process.env.HOST;
