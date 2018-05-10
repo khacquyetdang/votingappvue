@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "Server side for voting app",
   "main": "index.js",
+  "engines": {
+    "npm": "=5.6.0",
+    "node": "=9.4.0"
+  },
   "directories": {
     "test": "test"
   },
   "scripts": {
     "start:development": "cd server && cross-env PORT=4000; NODE_ENV=development node src/index.js --exec 'npm run lint && node'",
     "start:production": "cross-env NODE_ENV=production node src/index.js --exec 'npm run lint && node'",
-    "start": "cd server && npm run start:production"
+    "start": "cd server && npm install && npm run start:production"
   },
   "author": "Khac Quyet DANG",
   "license": "MIT",
