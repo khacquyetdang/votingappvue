@@ -9,6 +9,7 @@ import store from '@/store/store';
 
 import App from './App';
 import router from './router';
+import './analytics';
 
 Vue.config.productionTip = false;
 
