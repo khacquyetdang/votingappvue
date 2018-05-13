@@ -6,6 +6,8 @@ import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
 import ListPoll from '@/components/poll/List';
 import PollDetail from '@/components/poll/Detail';
+import AllPolls from '@/components/poll/AllPolls';
+import MyPolls from '../components/poll/MyPolls';
 
 Vue.use(Router);
 
@@ -36,8 +38,17 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'polls',
-      component: ListPoll,
+      name: 'allpolls',
+      component: AllPolls,
+    },
+    {
+      path: '/poll/my',
+      name: "mypolls",
+      component: MyPolls,      
+      meta: {
+        requiresAuth: true
+      }
+
     },
     {
       path: '/polls/:id',

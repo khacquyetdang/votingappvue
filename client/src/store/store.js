@@ -10,6 +10,7 @@ export default new Vuex.Store({
     token: loadTokenStorage(),
     drawer: null,
     polls: null,
+    mypolls: null,
     pollsbyId: new Map(),
     // user: null,
     isUserLoggedIn: loadTokenStorage() !== null,
@@ -18,6 +19,9 @@ export default new Vuex.Store({
   getters: {
     getPolls(state) {
       return state.polls;
+    },
+    getMyPolls(state) {
+      return state.mypolls;
     },
   },
   mutations: {
@@ -35,11 +39,17 @@ export default new Vuex.Store({
         state.pollsbyId.set(poll._id, poll);
       });
     },
+    setMyPolls: function(state, polls) {
+      state.mypolls = polls;
+    },
     toggleDrawer: function(state, drawer) {
       state.drawer = drawer;
     },
   },
   actions: {
+    setMyPolls: function({ commit }, polls) {
+      commit('setMyPolls', polls);
+    },
     setPolls: function({ commit }, polls) {
       commit('setPolls', polls);
     },

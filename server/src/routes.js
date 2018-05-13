@@ -20,9 +20,8 @@ var jwtCheck = jwt({
 module.exports = app => {
   app.post(
     '/api/auth/twitter/token',
-    function(req, res, next) {
-      request.post(
-        {
+    function (req, res, next) {
+      request.post({
           url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
           oauth: {
             consumer_key: process.env.TWITTER_KEY,
@@ -52,8 +51,8 @@ module.exports = app => {
         },
       );
     },
-    function(req, res) {
-      passport.authenticate('twitter-token', function(err, user, info) {
+    function (req, res) {
+      passport.authenticate('twitter-token', function (err, user, info) {
         console.log('inside twitter-token endpoint');
         console.log('user', user);
         console.log('err ', err);
@@ -85,9 +84,8 @@ module.exports = app => {
   );
 
   // this route is for request token on server side
-  app.post('/api/auth/twitter/reverse', function(req, res) {
-    request.post(
-      {
+  app.post('/api/auth/twitter/reverse', function (req, res) {
+    request.post({
         url: 'https://api.twitter.com/oauth/request_token',
         oauth: {
           oauth_callback: 'http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback',
@@ -95,9 +93,11 @@ module.exports = app => {
           consumer_secret: process.env.TWITTER_SECRET,
         },
       },
-      function(err, r, body) {
+      function (err, r, body) {
         if (err) {
-          return res.send(500, { message: err.message });
+          return res.send(500, {
+            message: err.message
+          });
         }
 
         var jsonStr =
@@ -108,7 +108,7 @@ module.exports = app => {
   });
 
   app.get('/api/auth/facebook/token', (req, res) => {
-    passport.authenticate('facebook-token', function(err, user, info) {
+    passport.authenticate('facebook-token', function (err, user, info) {
       // do something with req.user
       console.log('insde endpoint');
       console.log('user', user);
@@ -147,11 +147,9 @@ module.exports = app => {
     console.log('isAuthenticatedWithJwtToken');
     var userid = req.user.userid;
     var accesstoken = utils.getTokenFromReq(req);
-    User.findOne(
-      {
+    User.findOne({
         _id: userid,
-      },
-      {
+      }, {
         jwttokens: {
           $elemMatch: {
             access_token: accesstoken,
@@ -159,7 +157,7 @@ module.exports = app => {
           },
         },
       },
-      function(err, existingUser) {
+      function (err, existingUser) {
         console.log('check jwt token with db');
 
         if (err) {
@@ -201,42 +199,37 @@ module.exports = app => {
   // app.post('/api/photo', jwtCheck, requireScope('full_access'),
   // photoController.add); app.post('/api/photo', photoController.add);
   app.post(
-    '/api/photo',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/photo', [jwtCheck, isAuthenticatedWithJwtToken],
     photoController.add,
   );
 
   app.delete(
-    '/api/photo/:photoId',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/photo/:photoId', [jwtCheck, isAuthenticatedWithJwtToken],
     photoController.delete,
   );
 
   app.post(
-    '/api/photo/vote/:photoId',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/photo/vote/:photoId', [jwtCheck, isAuthenticatedWithJwtToken],
     photoController.vote,
   );
   app.get(
-    '/api/myphoto',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/myphoto', [jwtCheck, isAuthenticatedWithJwtToken],
     photoController.myphoto,
   );
 
   app.get('/api/photo', photoController.get);
 
   app.get(
-    '/api/logout',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/logout', [jwtCheck, isAuthenticatedWithJwtToken],
     userController.logout,
   );
 
   app.post(
-    '/api/poll/create',
-    [jwtCheck, isAuthenticatedWithJwtToken],
+    '/api/poll/create', [jwtCheck, isAuthenticatedWithJwtToken],
     pollController.create,
   );
-
+  app.get('/api/poll/mypolls', [jwtCheck, isAuthenticatedWithJwtToken],
+    pollController.mypolls);
   app.get('/api/poll/list', pollController.list);
   app.get('/api/poll/detail', pollController.poll);
   app.put('/api/poll/vote', pollController.vote);
@@ -245,7 +238,7 @@ module.exports = app => {
     res.send('hello postvcefd');
   }); */
 
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     console.log('app use');
     if (err) {
       console.log('app err: ', err);

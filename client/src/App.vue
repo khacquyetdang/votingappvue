@@ -32,7 +32,7 @@
                 this.$store.dispatch('toggleDrawer', newDrawer);
             },
             goHome() {
-                this.$router.push({name: 'polls'});
+                this.$router.push({name: 'allpolls'});
             },
             async getPolls() {
                 try {

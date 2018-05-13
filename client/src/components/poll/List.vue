@@ -50,19 +50,15 @@
 </template>
 
 <script>
-    import PollService from '@/services/PollService';
-
     export default {
         name: 'ListPoll',
+        props: ['polls'],
         data () {
             return { error: null };
         },
         computed: {
             pollEmpty () {
                 return !this.polls || this.polls.length === 0;
-            },
-            polls () {
-                return this.$store.getters.getPolls;
             }
         },
         methods: {
@@ -77,24 +73,12 @@
                     }
                 });
             },
-            async getPolls () {
-                try {
-                    const response = await PollService.list();
-                    console.log('polls response', response);
-                    let polls = response.data.polls;
-                    this.$store.dispatch('setPolls', polls);
-                    // this.polls = polls;
-                } catch (error) {
-                    this.error = error.response.data.error.msg || 'An error has occured, please try again later';
-                }
-            }
         },
         created () {
             console.log("created");
         },
         mounted () {
             console.log("mounted");
-            this.getPolls();
         },
         updated () {
             console.log("updated");

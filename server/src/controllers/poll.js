@@ -5,25 +5,47 @@ const config = require('../config/config.json');
 const utils = require('../utils/index');
 
 // JSON API for list of polls
-exports.list = function(req, res) {
+exports.list = function (req, res) {
   Poll.find({}, ['owner', 'question', 'choices'])
     .populate('owner', 'email')
-    .exec(function(error, polls) {
+    .exec(function (error, polls) {
       res.send({
         polls: polls,
       });
     });
 };
+
+// JSON API for list of polls
+exports.mypolls = function (req, res) {
+  var userId = req.user.userid;
+
+  Poll.find({
+      "owner": userId
+    }, ['owner', 'question', 'choices'])
+    .populate('owner', 'email')
+    .exec(function (error, polls) {
+      if (error) {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: {
+            msg: error,
+          },
+        });
+      } else {
+        res.send({
+          polls: polls,
+        });
+      }
+    });
+};
 // JSON API for getting a single poll
-exports.poll = function(req, res) {
+exports.poll = function (req, res) {
   var pollId = req.query.pollid;
   Poll.findById(
     pollId,
-    '',
-    {
+    '', {
       lean: true,
     },
-    function(err, poll) {
+    function (err, poll) {
       if (poll) {
         var userVoted = false,
           userChoice,
@@ -56,7 +78,7 @@ exports.poll = function(req, res) {
 };
 
 // JSON API for getting a single poll
-exports.vote = function(req, res) {
+exports.vote = function (req, res) {
   let pollId = req.body.pollId;
   let choiceId = req.body.choiceId;
   let newChoice = req.body.newChoice;
@@ -74,29 +96,26 @@ exports.vote = function(req, res) {
   }
   const ip = req.header('x-forwarded-for') || req.ip;
 
-  Poll.update(
-    {
+  Poll.update({
       _id: pollId,
       'choices.votes.user_id': userId,
       'choices.votes.ip': ip,
-    },
-    {
+    }, {
       $pull: {
         'choices.$.votes': {
           ip: ip,
           user_id: userId,
         },
       },
-    },
-    {
+    }, {
       multi: true,
     },
-    function(err, pollupdated) {
+    function (err, pollupdated) {
       if (err) {
         console.log('error', err);
       }
       console.log('pollupdated', pollupdated);
-      Poll.findById(pollId, function(err, poll) {
+      Poll.findById(pollId, function (err, poll) {
         let choice;
         if (choiceId) {
           choice = poll.choices.id(choiceId);
@@ -117,16 +136,14 @@ exports.vote = function(req, res) {
         } else if (newChoice) {
           choice = {
             text: newChoice,
-            votes: [
-              {
-                ip: ip,
-                user_id: userId,
-              },
-            ],
+            votes: [{
+              ip: ip,
+              user_id: userId,
+            }, ],
           };
           poll.choices.push(choice);
         }
-        poll.save(function(err, doc) {
+        poll.save(function (err, doc) {
           if (err) {
             return res.status(HttpStatus.CONFLICT).send({
               error: {
@@ -166,12 +183,12 @@ exports.vote = function(req, res) {
 };
 
 // JSON API for creating a new poll
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var userid = req.user.userid;
 
   console.log('create polls req body', req.body);
   var reqBody = req.body;
-  var choices = reqBody.choices.filter(function(v) {
+  var choices = reqBody.choices.filter(function (v) {
     return v.text != '';
   });
   choices = choices.map(choice => {
@@ -190,7 +207,7 @@ exports.create = function(req, res) {
     choices: choices,
   };
   var poll = new Poll(pollObj);
-  poll.save(function(err, doc) {
+  poll.save(function (err, doc) {
     if (err || !doc) {
       console.log('err', err);
       console.log('doc', doc);

@@ -69,7 +69,13 @@
                         title: 'Create poll',
                         path: '/poll/create',
                         items: []
-                    }, {
+                    }, 
+                    {
+                        title: 'My polls',
+                        path: '/poll/my',
+                        items: []                    
+                    },
+                    {
                         title: 'About',
                         path: '/about',
                         items: []

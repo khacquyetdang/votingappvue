@@ -22,7 +22,6 @@ sync(store, router);
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  console.log("store", store);
   const isAuthenthicated = store.state.isUserLoggedIn;
   if (requiresAuth && !isAuthenthicated) {
     next('/login');

@@ -4,6 +4,10 @@ export default {
   createPoll: function(poll) {
     return Api().post('/poll/create', poll);
   },
+  mypolls: function() {
+    return Api().get('/poll/mypolls');
+  },
+
   list: function() {
     return Api().get('/poll/list');
   },
