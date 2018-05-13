@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import { saveTokenStorage } from '@/localStorage';
+    import { saveUserStorage } from '@/localStorage';
 
     export default {
         name: 'PageHeader',
@@ -94,8 +94,8 @@
         },
         methods: {
             logout () {
-                saveTokenStorage(null);
-                this.$store.dispatch('setToken', null);
+                saveUserStorage(null);
+                this.$store.dispatch('setUser', null);
                 this.$router.push({ name: 'login' });
             }
         }

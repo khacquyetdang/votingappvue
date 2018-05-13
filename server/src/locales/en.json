@@ -7,5 +7,6 @@
     "Description cannot be blank": "Description cannot be blank",
     "The photo is added" : "The photo is added",
     "This photo is not existed" : "This photo is not existed",
-    "This photo is deleted" : "This photo is deleted"
+    "This photo is deleted" : "This photo is deleted",
+    "The poll is removed." : "The poll is removed."
 }

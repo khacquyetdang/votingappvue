@@ -10,8 +10,8 @@ export const loadUserStorage = () => {
 };
 
 export const saveUserStorage = data => {
-  let access_token = data.access_token;
-  let id_user = data.id_user;
+  let access_token = data ? data.access_token : null;
+  let id_user = data ? data.id_user : null;
   access_token && id_user
     ? localStorage.setItem(USER_KEY, JSON.stringify({
       access_token : access_token,

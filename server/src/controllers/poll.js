@@ -6,7 +6,9 @@ const utils = require('../utils/index');
 
 // JSON API for list of polls
 exports.list = function (req, res) {
-  Poll.find({}, ['owner', 'question', 'choices'])
+  Poll.find({
+    "isDeleted" : false
+  }, ['owner', 'question', 'choices'])
     .populate('owner', 'email')
     .exec(function (error, polls) {
       res.send({
@@ -20,7 +22,8 @@ exports.mypolls = function (req, res) {
   var userId = req.user.userid;
 
   Poll.find({
-      "owner": userId
+      "owner": userId,
+      "isDeleted" : false
     }, ['owner', 'question', 'choices'])
     .populate('owner', 'email')
     .exec(function (error, polls) {
@@ -177,6 +180,36 @@ exports.vote = function (req, res) {
             poll: theDoc,
           });
         });
+      });
+    },
+  );
+};
+
+
+// JSON API for getting a single poll
+exports.remove = function (req, res) {
+  let pollId = req.params.pollId;
+  let userId = req.user.userid;;
+
+  Poll.update({
+      _id: pollId,
+    }, {
+      $set: {
+        'isDeleted': true,
+      },
+    },
+    function (err, result) {
+      if (err) {
+        console.log('error', err);
+        return res.status(HttpStatus.CONFLICT).send({
+          error: {
+            msg: err,
+          },
+        });
+      }
+
+      return res.send({
+          msg: __("The poll is removed.")
       });
     },
   );

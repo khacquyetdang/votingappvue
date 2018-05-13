@@ -21,4 +21,7 @@ export default {
       newChoice: newChoice,
     });
   },
+  remove: function(pollid) {
+    return Api().delete('/poll/' + pollid);
+  }, 
 };

@@ -55,6 +55,7 @@
                             v-if="showRemovedBtn"
                             block
                             round
+                            @click="() => remove()"
                             color="error"
                             > Remove poll
                             </v-btn>
@@ -152,6 +153,17 @@
         } catch (error) {
           this.error = error.response.data.error.msg || 'An error has occured, please try again later';
 
+        }
+      },
+      async remove() {
+        try {
+          let pollId = this.$props['id'];
+          console.log("remove poll pollid", pollId);
+          const response = await PollService.remove(pollId);
+          console.log('poll removed response', response);
+          this.$router.go(-1); 
+        } catch (error) {
+          this.error = error.response.data.error.msg || 'An error has occured, please try again later';
         }
       },
       fillData() {

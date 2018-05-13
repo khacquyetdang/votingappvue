@@ -8,5 +8,7 @@
     "User is registered, treating the message": "User is registered, treating the message",
 	"The photo is added" : "La photo est bien ajoutée",
 	"This photo is not existed" : "La photo n'existe pas",
-	"This photo is deleted" : "La photo a été supprimée"
+	"This photo is deleted" : "La photo a été supprimée",
+	"The poll is removed." : "Le sondage a été supprimé."
+
 }
