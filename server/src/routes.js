@@ -196,29 +196,6 @@ module.exports = app => {
   app.post('/api/signup', userController.postSignup);
   app.post('/api/login', userController.postLogin);
 
-  // app.post('/api/photo', jwtCheck, requireScope('full_access'),
-  // photoController.add); app.post('/api/photo', photoController.add);
-  app.post(
-    '/api/photo', [jwtCheck, isAuthenticatedWithJwtToken],
-    photoController.add,
-  );
-
-  app.delete(
-    '/api/photo/:photoId', [jwtCheck, isAuthenticatedWithJwtToken],
-    photoController.delete,
-  );
-
-  app.post(
-    '/api/photo/vote/:photoId', [jwtCheck, isAuthenticatedWithJwtToken],
-    photoController.vote,
-  );
-  app.get(
-    '/api/myphoto', [jwtCheck, isAuthenticatedWithJwtToken],
-    photoController.myphoto,
-  );
-
-  app.get('/api/photo', photoController.get);
-
   app.get(
     '/api/logout', [jwtCheck, isAuthenticatedWithJwtToken],
     userController.logout,

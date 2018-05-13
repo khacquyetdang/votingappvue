@@ -1,16 +1,21 @@
-export const TOKEN_KEY = '_token';
+export const USER_KEY = '_voting_user';
 
-export const loadTokenStorage = () => {
+export const loadUserStorage = () => {
   try {
-    const token = localStorage.getItem(TOKEN_KEY);
-    return token;
+    const user =  JSON.parse(localStorage.getItem(USER_KEY));
+    return user;
   } catch (err) {
     return null;
   }
 };
 
-export const saveTokenStorage = token => {
-  token
-    ? localStorage.setItem(TOKEN_KEY, token)
-    : localStorage.removeItem(TOKEN_KEY);
+export const saveUserStorage = data => {
+  let access_token = data.access_token;
+  let id_user = data.id_user;
+  access_token && id_user
+    ? localStorage.setItem(USER_KEY, JSON.stringify({
+      access_token : access_token,
+      id_user : id_user
+    }))
+    : localStorage.removeItem(USER_KEY);
 };

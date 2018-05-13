@@ -76,7 +76,7 @@ a {
 <script>
 
     import AuthenticationService from '@/services/AuthenticationService';
-    import { saveTokenStorage } from '@/localStorage';
+    import { saveUserStorage } from '@/localStorage';
 
     export default {
         name: 'Login',
@@ -87,9 +87,9 @@ a {
             async login () {
                 try {
                     const response = await AuthenticationService.login({ email: this.email, password: this.password });
-                    this.$store.dispatch('setToken', response.data.access_token);
+                    this.$store.dispatch('setUser', response.data);
                     this.$router.push({ name: 'home' });
-                    saveTokenStorage(response.data.access_token);
+                    saveUserStorage(response.data);
                     console.log('response', response);
                 } catch (error) {
                     console.log('error', error.response);

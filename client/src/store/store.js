@@ -1,19 +1,22 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { loadTokenStorage } from '../localStorage';
+import { loadUserStorage } from '../localStorage';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
   state: {
-    token: loadTokenStorage(),
+    user : {
+      token: loadUserStorage() ? loadUserStorage().access_token : null,
+      id_user: loadUserStorage() ? loadUserStorage().id_user : null,
+    },
     drawer: null,
     polls: null,
     mypolls: null,
     pollsbyId: new Map(),
     // user: null,
-    isUserLoggedIn: loadTokenStorage() !== null,
+    isUserLoggedIn: loadUserStorage() !== null,
   },
 
   getters: {
@@ -23,11 +26,19 @@ export default new Vuex.Store({
     getMyPolls(state) {
       return state.mypolls;
     },
+    getToken(state) {
+      return state.user.token;
+    },
+    getIdUser(state) {
+      return state.user.id_user;
+    },
+
   },
   mutations: {
-    setToken: function(state, token) {
-      state.token = token;
-      if (token) {
+    setUser: function(state, user) {
+      state.token = user.access_token;
+      state.id_user = user.id_user;
+      if (user) {
         state.isUserLoggedIn = true;
       } else {
         state.isUserLoggedIn = false;
@@ -53,8 +64,8 @@ export default new Vuex.Store({
     setPolls: function({ commit }, polls) {
       commit('setPolls', polls);
     },
-    setToken: function({ commit }, token) {
-      commit('setToken', token);
+    setUser: function({ commit }, user) {
+      commit('setUser', user);
     },
     toggleDrawer: function({ commit }, drawer) {
       commit('toggleDrawer', drawer);

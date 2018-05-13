@@ -5,7 +5,7 @@ export default () => {
   return axios.create({
     baseURL: process.env.baseURL,
     headers: {
-      Authorization: `Bearer ${store.state.token}`,
+      Authorization: `Bearer ${store.getters.getToken}`,
     },
   });
 };
