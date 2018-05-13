@@ -6,9 +6,9 @@
                 row="row"
                 justify-center
                 wrap="wrap">
-                <v-card raised="10">
+                <v-card :raised="true">
                     <v-card-title primary-title>
-                        <h3>There is no poll created. Please create
+                        <h3>There is no poll created. Please create abc
                             your first poll
                         </h3>
                     </v-card-title>

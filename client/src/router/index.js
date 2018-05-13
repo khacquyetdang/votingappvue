@@ -30,6 +30,9 @@ export default new Router({
       path: '/poll/create',
       name: 'createpoll',
       component: CreatePoll,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/',
