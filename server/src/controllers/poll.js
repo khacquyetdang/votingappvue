@@ -19,8 +19,11 @@ exports.list = function (req, res) {
 
 // JSON API for list of polls
 exports.mypolls = function (req, res) {
-  var userId = req.user.userid;
 
+  let token = utils.getTokenFromReq(req);
+  console.log('mypolls token ', token);
+  var userId = req.user.userid;
+  console.log("userID mypolls ", userId);
   Poll.find({
       "owner": userId,
       "isDeleted" : false

@@ -88,7 +88,7 @@ a {
                 try {
                     const response = await AuthenticationService.login({ email: this.email, password: this.password });
                     this.$store.dispatch('setUser', response.data);
-                    this.$router.push({ name: 'home' });
+                    this.$router.push({ name: 'allpolls' });
                     saveUserStorage(response.data);
                     console.log('response', response);
                 } catch (error) {

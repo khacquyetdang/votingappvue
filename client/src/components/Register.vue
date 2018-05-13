@@ -76,6 +76,7 @@
           const response = await AuthenticationService.register({ email: this.email, password: this.password, confirmPassword: this.confirmPassword });
           this.$store.dispatch('setUser', response.data);
           saveUserStorage(response.data);
+          this.$router.push({ name: 'allpolls' });
           console.log('response', response);
         } catch (error) {
           console.log('error', error);

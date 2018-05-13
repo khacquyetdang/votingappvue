@@ -8,7 +8,7 @@
                 wrap="wrap">
                 <v-card :raised="true">
                     <v-card-title primary-title>
-                        <h3>There is no poll created. Please create abc
+                        <h3>There is no poll created. Please create
                             your first poll
                         </h3>
                     </v-card-title>
