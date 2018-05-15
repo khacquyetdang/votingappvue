@@ -97,11 +97,12 @@ exports.vote = function (req, res) {
       console.log('decoded', decoded);
       userId = decoded.userid;
     } catch (error) {
-      console.log('error ', error);
+      console.log('error json token error');
     }
   }
   const ip = req.header('x-forwarded-for') || req.ip;
 
+  // remove the vote that match ip and userId
   Poll.update({
       _id: pollId,
       'choices.votes.user_id': userId,
