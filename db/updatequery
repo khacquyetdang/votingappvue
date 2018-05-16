@@ -1,0 +1,9 @@
+db.getCollection('polls').update({  _id: ObjectId("5af5802a235f5601951bf2ed"),
+      'choices.votes.user_id': null,
+      'choices.votes.ip': "77.71.116.60"}, {
+      $pull: {
+        'choices.$.votes': {
+          ip: null,
+          user_id: "77.71.116.60",
+        }
+      }})

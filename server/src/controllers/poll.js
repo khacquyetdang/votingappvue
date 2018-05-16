@@ -101,20 +101,31 @@ exports.vote = function (req, res) {
     }
   }
   const ip = req.header('x-forwarded-for') || req.ip;
+  let queryUpdateWhere = userId !== null ? {
+    _id: pollId,
+    'choices.votes.user_id': userId,
+    'choices.votes.ip': ip,
+  } : {
+    _id: pollId,
+    'choices.votes.ip': ip,
+  };
 
-  // remove the vote that match ip and userId
-  Poll.update({
-      _id: pollId,
-      'choices.votes.user_id': userId,
-      'choices.votes.ip': ip,
-    }, {
-      $pull: {
-        'choices.$.votes': {
-          ip: ip,
-          user_id: userId,
-        },
+  let queryUpdateSet = userId !== null ? {
+    $pull: {
+      'choices.$.votes': {
+        ip: ip,
+        user_id: userId,
       },
-    }, {
+    },
+  } : {
+    $pull: {
+      'choices.$.votes': {
+        ip: ip,
+      },
+    },
+  };
+  // remove the vote that match ip and userId
+  Poll.update(queryUpdateWhere, queryUpdateSet, {
       multi: true,
     },
     function (err, pollupdated) {
