@@ -6,6 +6,7 @@ module.exports = {
     'js',
     'json',
     'vue',
+    'html'
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -13,6 +14,7 @@ module.exports = {
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest',
+    "^.+\\.html$": "<rootDir>/test/utils/htmlLoader.js"
   },
   testPathIgnorePatterns: [
     '<rootDir>/test/e2e',

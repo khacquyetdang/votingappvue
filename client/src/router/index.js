@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import AboutPage from '@/components/About';
+import AboutPage from '@/components/About/Index';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
 import CreatePoll from '@/components/poll/CreatePoll';
