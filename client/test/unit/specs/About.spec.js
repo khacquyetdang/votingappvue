@@ -9,6 +9,6 @@ describe('AboutPage component', () => {
    // console.log("vm el", vm.$el);
     console.log("vm el h1 text content", vm.$el.querySelector('.home h1').textContent);
     expect(vm.$el.querySelector('.home h1').textContent)
-      .toEqual('Welcome to Your Vue.js App');
+      .to.equal('Welcome to Your Vue.js App');
   });
 });
