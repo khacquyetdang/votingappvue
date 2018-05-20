@@ -64,4 +64,22 @@ describe('Header component', () => {
     .to.have.property('length', 0);
   });
 
+  it('It should update store when logout', () => {    
+    testOptions.state.isUserLoggedIn = true;
+    const stubbedStore = new Vuex.Store(testOptions);
+    const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
+    const vm = new Constructor().$mount();
+
+    //const logoutElement = vm.$el.querySelectorAll('v-list-tile v-list-tile-content v-list-tile-title h3[text()="Sign out"]');
+    console.log("el", vm.$el);
+    //const allMenuElement = vm.$el.querySelectorAll('a:has(div:has(div:has(h3)))');
+
+    const allMenuElement = vm.$el.querySelectorAll('a:has(div)');
+
+    console.log("allMenuElement", allMenuElement);
+    const logoutElement = vm.$el.querySelectorAll('h3[text*="Sign out"]');
+
+  });
+  
+
 });
