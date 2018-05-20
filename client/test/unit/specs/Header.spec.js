@@ -28,37 +28,40 @@ describe('Header component', () => {
 
     const Constructor = Vue.extend({ ...Header, router: router, store: store});
     const vm = new Constructor().$mount();
-    console.log("header all ", vm.$el);
-    console.log("about menu", vm.$el.querySelectorAll('a[href*="#/about"]'));
     expect(vm.$el.querySelectorAll('a[href*="#/about"]'))
-      .to.not.equal(null);
+    .to.have.property('length', 1);  
   });
-  it('It should content login, signup route when not authenticated', () => {    
-    testOptions.isUserLoggedIn = false;
+  it('It should content login, signup route when not authenticated and ' +
+  'It should not content /poll/create, poll/my route', () => {    
+    testOptions.state.isUserLoggedIn = false;
     const stubbedStore = new Vuex.Store(testOptions);
     const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
     const vm = new Constructor().$mount();
     expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
-      .to.not.equal(null);
+    .to.have.property('length', 1);
     expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
-      .to.not.equal(null);
+    .to.have.property('length', 1);
+  
+      expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
+      .to.have.property('length', 0);
+    expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
+    .to.have.property('length', 0);
   });
 
   it('It should content /poll/create, poll/my route when authenticated. It should not contains register neither login ', () => {    
-    testOptions.isUserLoggedIn = true;
+    testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
     const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
     const vm = new Constructor().$mount();
 
-    console.log("menu Header", vm.$el);
     expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
-      .to.not.equal(null);
+    .to.have.property('length', 1);
     expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
-      .to.not.equal(null);
+    .to.have.property('length', 1);
       expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
-      .to.equal(null);
+      .to.have.property('length', 0);
     expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
-      .to.equal(null);
+    .to.have.property('length', 0);
   });
 
 });
