@@ -1,4 +1,4 @@
-require('babel-polyfill'); 
+//require('babel-polyfill'); 
 import Vue from 'vue';
 import AboutPage from '@/components/About';
 

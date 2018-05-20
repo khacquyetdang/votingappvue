@@ -4,7 +4,7 @@ import { loadUserStorage } from '../localStorage';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const options = {
   strict: true,
   state: {
     user : {
@@ -73,4 +73,7 @@ export default new Vuex.Store({
       commit('toggleDrawer', drawer);
     },
   },
-});
+};
+
+export default new Vuex.Store(options);
+export { options };
