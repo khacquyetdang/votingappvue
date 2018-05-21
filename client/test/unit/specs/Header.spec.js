@@ -123,17 +123,11 @@ describe('Header component', () => {
 
     expect(_.isEqual(itemsAuthenticated, wrapper.vm.items)).to.be.true;
  
-    console.log("items before clicked", wrapper.vm.items);
-
+ 
     menuLogout.trigger('click');
 
     expect(spy).to.have.been.called;
-    //expect(spy).to.have.been.called();
-    console.log("methods ", wrapper.vm.logout);
-    //expect(wrapper.vm.logout).to.have.been.called();
-    console.log("store.state", wrapper.vm.$store.state);
-    console.log("items after clicked", wrapper.vm.items);
-
+    
     var itemsLogout = [{
       title: 'Sign In',
       path: '/login',
