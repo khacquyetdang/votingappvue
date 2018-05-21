@@ -84,7 +84,6 @@ describe('Header component', () => {
     testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
     const logoutHandler = sinon.stub();
-    const btnLogoutHandler = sinon.stub();
 
     const spy = sinon.spy(Header.methods, 'logout')
 
@@ -103,13 +102,30 @@ describe('Header component', () => {
       console.log("single menu item h3 ", element.find("h3").text() === "Sign out");
       return element.find("h3").text() === "Sign out";
     }).at(0);*/
+
+    let itemsAuthenticated = [{
+        title: 'Create poll',
+        path: '/poll/create',
+        items: []
+      },
+      {
+        title: 'My polls',
+        path: '/poll/my',
+        items: []
+      },
+      {
+        title: 'About',
+        path: '/about',
+        items: []
+      }
+
+    ];
+
+    expect(_.isEqual(itemsAuthenticated, wrapper.vm.items)).to.be.true;
+ 
     console.log("items before clicked", wrapper.vm.items);
 
     menuLogout.trigger('click');
-
-    const btnLogout = wrapper.find("#btnLogout");
-
-    console.log("btnLogout", btnLogout.html());
 
     expect(spy).to.have.been.called;
     //expect(spy).to.have.been.called();

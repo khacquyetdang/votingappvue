@@ -31,7 +31,6 @@
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>
-        <button id="btnLogout" @click="logout">Logout</button>
 
     </v-navigation-drawer>
 
@@ -97,9 +96,6 @@
             }
         },
         methods: {
-            btnLogout() {
-                console.log("btnLogout");
-            },
             logout (event) {
                 saveUserStorage(null);
                 this.$store.dispatch('setUser', null);
