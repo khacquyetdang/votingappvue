@@ -18,7 +18,10 @@
                     </v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-if="$store.state.isUserLoggedIn"
+            <v-list-tile 
+                class="logoutMenu"
+                id="logoutMenu"
+                v-if="$store.state.isUserLoggedIn"
                 @click="logout">
                 <v-list-tile-content>
                     <v-list-tile-title>
@@ -28,6 +31,7 @@
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>
+        <button id="btnLogout" @click="logout">Logout</button>
 
     </v-navigation-drawer>
 
@@ -93,10 +97,14 @@
             }
         },
         methods: {
-            logout () {
+            btnLogout() {
+                console.log("btnLogout");
+            },
+            logout (event) {
                 saveUserStorage(null);
                 this.$store.dispatch('setUser', null);
                 this.$router.push({ name: 'login' });
+                console.log("logout end");
             }
         }
     };

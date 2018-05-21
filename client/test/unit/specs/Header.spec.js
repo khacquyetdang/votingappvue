@@ -5,11 +5,17 @@ import VeeValidate from 'vee-validate';
 import {
   sync
 } from 'vuex-router-sync';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
+import {
+  shallowMount, mount
+} from '@vue/test-utils';
+import sinon from 'sinon';
 import _ from 'lodash';
 import Vuex from 'vuex';
 import Header from '@/components/Header';
-import store, { options } from '@/store/store';
+import store, {
+  options
+} from '@/store/store';
 import router from '@/router';
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
@@ -22,64 +28,113 @@ describe('Header component', () => {
   beforeEach(() => {
     testOptions = _.cloneDeep(options);
   });
-  
-  it('It should content about menu', () => {    
+
+  it('It should content about menu', () => {
     Vue.use(VueRouter);
 
-    const Constructor = Vue.extend({ ...Header, router: router, store: store});
+    const Constructor = Vue.extend({ ...Header,
+      router: router,
+      store: store
+    });
     const vm = new Constructor().$mount();
     expect(vm.$el.querySelectorAll('a[href*="#/about"]'))
-    .to.have.property('length', 1);  
+      .to.have.property('length', 1);
   });
   it('It should content login, signup route when not authenticated and ' +
-  'It should not content /poll/create, poll/my route', () => {    
-    testOptions.state.isUserLoggedIn = false;
-    const stubbedStore = new Vuex.Store(testOptions);
-    const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
-    const vm = new Constructor().$mount();
-    expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
-    .to.have.property('length', 1);
-    expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
-    .to.have.property('length', 1);
-  
-      expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
-      .to.have.property('length', 0);
-    expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
-    .to.have.property('length', 0);
-  });
+    'It should not content /poll/create, poll/my route', () => {
+      testOptions.state.isUserLoggedIn = false;
+      const stubbedStore = new Vuex.Store(testOptions);
+      const Constructor = Vue.extend({ ...Header,
+        router: router,
+        store: stubbedStore
+      });
+      const vm = new Constructor().$mount();
+      expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
+        .to.have.property('length', 1);
+      expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
+        .to.have.property('length', 1);
 
-  it('It should content /poll/create, poll/my route when authenticated. It should not contains register neither login ', () => {    
+      expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
+        .to.have.property('length', 0);
+      expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
+        .to.have.property('length', 0);
+    });
+
+  it('It should content /poll/create, poll/my route when authenticated. It should not contains register neither login ', () => {
     testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
-    const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
+    const Constructor = Vue.extend({ ...Header,
+      router: router,
+      store: stubbedStore
+    });
     const vm = new Constructor().$mount();
 
     expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
-    .to.have.property('length', 1);
+      .to.have.property('length', 1);
     expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
-    .to.have.property('length', 1);
-      expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
+      .to.have.property('length', 1);
+    expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
       .to.have.property('length', 0);
     expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
-    .to.have.property('length', 0);
+      .to.have.property('length', 0);
   });
 
-  it('It should update store when logout', () => {    
+  it('It should update store when logout', done => {
     testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
-    const Constructor = Vue.extend({ ...Header, router: router, store: stubbedStore});
-    const vm = new Constructor().$mount();
+    const logoutHandler = sinon.stub();
+    const btnLogoutHandler = sinon.stub();
 
-    //const logoutElement = vm.$el.querySelectorAll('v-list-tile v-list-tile-content v-list-tile-title h3[text()="Sign out"]');
-    console.log("el", vm.$el);
-    //const allMenuElement = vm.$el.querySelectorAll('a:has(div:has(div:has(h3)))');
+    const spy = sinon.spy(Header.methods, 'logout')
 
-    const allMenuElement = vm.$el.querySelectorAll('a:has(div)');
+    const wrapper = shallowMount(Header, {
+      router: router,
+      store: stubbedStore,
+      /*methods: { 
+         logout : logoutHandler
+      }*/
+    });
 
-    console.log("allMenuElement", allMenuElement);
-    const logoutElement = vm.$el.querySelectorAll('h3[text*="Sign out"]');
+   
+    const menuLogout = wrapper.find('.logoutMenu');
+    //console.log("instance of allMenuElement", (allMenuElement instanceof WrapperArray));
+    /*const menuLogout = allMenuElement.filter(element => {
+      console.log("single menu item h3 ", element.find("h3").text() === "Sign out");
+      return element.find("h3").text() === "Sign out";
+    }).at(0);*/
+    console.log("all menu", wrapper.findAll(".pt-0").at(0).html());
+    console.log("menuLogout", menuLogout.html());
+
+    menuLogout.trigger('click');
+    
+    const btnLogout = wrapper.find("#btnLogout");
+
+    console.log("btnLogout", btnLogout.html());
+
+    btnLogout.trigger('click');
+    
+    //expect(logoutHandler.called).to.be(true);
+    expect(spy).to.have.been.called;
+    //expect(spy).to.have.been.called();
+    console.log("methods ",  wrapper.vm.logout);
+    //expect(wrapper.vm.logout).to.have.been.called();
+    Vue.nextTick(() => {
+      // Since we're doing this asynchronously, we need to call done() to tell Mocha that we've finished the test.
+      console.log("store.state", wrapper.vm.$store.state);
+      console.log("items after clicked", wrapper.vm.items);
+      /*for (let index = 0; index < allMenuElement.length; index++)
+      { 
+        let element = allMenuElement[index];  
+        console.log("single menu item", element);      
+      };*/
+
+      console.log("allMenuElement", allMenuElement);
+      done();
+    });
+
+    //const logoutElement = vm.$el.querySelectorAll('h3[text*="Sign out"]');
 
   });
-  
+
 
 });
