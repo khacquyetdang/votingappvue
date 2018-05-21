@@ -7,7 +7,8 @@ import {
 } from 'vuex-router-sync';
 import VueRouter from 'vue-router';
 import {
-  shallowMount, mount
+  shallowMount,
+  mount
 } from '@vue/test-utils';
 import sinon from 'sinon';
 import _ from 'lodash';
@@ -79,7 +80,7 @@ describe('Header component', () => {
       .to.have.property('length', 0);
   });
 
-  it('It should update store when logout', done => {
+  it('It should update store when logout', () => {
     testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
     const logoutHandler = sinon.stub();
@@ -95,45 +96,43 @@ describe('Header component', () => {
       }*/
     });
 
-   
+
     const menuLogout = wrapper.find('.logoutMenu');
     //console.log("instance of allMenuElement", (allMenuElement instanceof WrapperArray));
     /*const menuLogout = allMenuElement.filter(element => {
       console.log("single menu item h3 ", element.find("h3").text() === "Sign out");
       return element.find("h3").text() === "Sign out";
     }).at(0);*/
-    console.log("all menu", wrapper.findAll(".pt-0").at(0).html());
-    console.log("menuLogout", menuLogout.html());
+    console.log("items before clicked", wrapper.vm.items);
 
     menuLogout.trigger('click');
-    
+
     const btnLogout = wrapper.find("#btnLogout");
 
     console.log("btnLogout", btnLogout.html());
 
-    btnLogout.trigger('click');
-    
-    //expect(logoutHandler.called).to.be(true);
     expect(spy).to.have.been.called;
     //expect(spy).to.have.been.called();
-    console.log("methods ",  wrapper.vm.logout);
+    console.log("methods ", wrapper.vm.logout);
     //expect(wrapper.vm.logout).to.have.been.called();
-    Vue.nextTick(() => {
-      // Since we're doing this asynchronously, we need to call done() to tell Mocha that we've finished the test.
-      console.log("store.state", wrapper.vm.$store.state);
-      console.log("items after clicked", wrapper.vm.items);
-      /*for (let index = 0; index < allMenuElement.length; index++)
-      { 
-        let element = allMenuElement[index];  
-        console.log("single menu item", element);      
-      };*/
+    console.log("store.state", wrapper.vm.$store.state);
+    console.log("items after clicked", wrapper.vm.items);
 
-      console.log("allMenuElement", allMenuElement);
-      done();
-    });
-
-    //const logoutElement = vm.$el.querySelectorAll('h3[text*="Sign out"]');
-
+    var itemsLogout = [{
+      title: 'Sign In',
+      path: '/login',
+      items: []
+    }, {
+      title: 'Sign Up',
+      path: '/register',
+      items: []
+    }, {
+      title: 'About',
+      path: '/about',
+      items: []
+    }];
+    var isTheSameItems = _.isEqual(itemsLogout, wrapper.vm.items);
+    expect(isTheSameItems).to.be.true;
   });
 
 
