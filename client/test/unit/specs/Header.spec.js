@@ -8,7 +8,9 @@ import {
 import VueRouter from 'vue-router';
 import {
   shallowMount,
-  mount
+  shallow,
+  mount, 
+  createLocalVue
 } from '@vue/test-utils';
 import sinon from 'sinon';
 import _ from 'lodash';
@@ -18,10 +20,11 @@ import store, {
   options
 } from '@/store/store';
 import router from '@/router';
-Vue.use(Vuetify);
-Vue.use(VeeValidate);
+const localVue = createLocalVue();
+localVue.use(Vuetify);
+localVue.use(VeeValidate);
 sync(store, router);
-Vue.use(VueRouter);
+localVue.use(VueRouter);
 
 
 describe('Header component', () => {
@@ -31,13 +34,15 @@ describe('Header component', () => {
   });
 
   it('It should content about menu', () => {
-    Vue.use(VueRouter);
+    const stubbedStore = new Vuex.Store(testOptions);
 
-    const Constructor = Vue.extend({ ...Header,
+    const wrapper = mount(Header, {
+      localVue,
       router: router,
-      store: store
+      store: stubbedStore,
     });
-    const vm = new Constructor().$mount();
+
+    const vm = wrapper.vm;
     expect(vm.$el.querySelectorAll('a[href*="#/about"]'))
       .to.have.property('length', 1);
   });
@@ -45,11 +50,15 @@ describe('Header component', () => {
     'It should not content /poll/create, poll/my route', () => {
       testOptions.state.isUserLoggedIn = false;
       const stubbedStore = new Vuex.Store(testOptions);
-      const Constructor = Vue.extend({ ...Header,
+
+      const wrapper = mount(Header, {
+        localVue,
         router: router,
-        store: stubbedStore
+        store: stubbedStore,
       });
-      const vm = new Constructor().$mount();
+  
+      const vm = wrapper.vm;
+
       expect(vm.$el.querySelectorAll('a[href*="#/register"]'))
         .to.have.property('length', 1);
       expect(vm.$el.querySelectorAll('a[href*="#/login"]'))
@@ -64,12 +73,15 @@ describe('Header component', () => {
   it('It should content /poll/create, poll/my route when authenticated. It should not contains register neither login ', () => {
     testOptions.state.isUserLoggedIn = true;
     const stubbedStore = new Vuex.Store(testOptions);
-    const Constructor = Vue.extend({ ...Header,
-      router: router,
-      store: stubbedStore
-    });
-    const vm = new Constructor().$mount();
 
+    const wrapper = mount(Header, {
+      localVue,
+      router: router,
+      store: stubbedStore,
+    });
+
+    const vm = wrapper.vm;
+    
     expect(vm.$el.querySelectorAll('a[href*="#/poll/create"]'))
       .to.have.property('length', 1);
     expect(vm.$el.querySelectorAll('a[href*="#/poll/my"]'))
@@ -88,6 +100,7 @@ describe('Header component', () => {
     const spy = sinon.spy(Header.methods, 'logout')
 
     const wrapper = shallowMount(Header, {
+      localVue,
       router: router,
       store: stubbedStore,
       /*methods: { 
@@ -122,12 +135,12 @@ describe('Header component', () => {
     ];
 
     expect(_.isEqual(itemsAuthenticated, wrapper.vm.items)).to.be.true;
- 
- 
+
+
     menuLogout.trigger('click');
 
     expect(spy).to.have.been.called;
-    
+
     var itemsLogout = [{
       title: 'Sign In',
       path: '/login',
