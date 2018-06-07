@@ -11,14 +11,15 @@ module.exports = function karmaConfig(config) {
     // 1. install corresponding karma launcher
     //    http://karma-runner.github.io/0.13/config/browsers.html
     // 2. add it to the `browsers` array below.
-    browsers: ['PhantomJS'],
-    frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
+    browsers: ['ChromeHeadless'],
+    frameworks: ['mocha', 'sinon-chai'],
     reporters: ['spec', 'coverage'],
     //files: ['../../node_modules/es6-promise/dist/es6-promise.auto.js', './index.js'],
     files: [
-      '../../node_modules/babel-polyfill/dist/polyfill.js',
-      './index.js'],
- 
+      //'../../node_modules/babel-polyfill/dist/polyfill.js',
+      './index.js'
+    ],
+
     preprocessors: {
       './index.js': ['webpack', 'sourcemap']
     },
@@ -28,6 +29,11 @@ module.exports = function karmaConfig(config) {
     },
     coverageReporter: {
       dir: './coverage',
+      instrumenterOptions: {
+        istanbul: {
+          noCompact: true
+        }
+      },
       reporters: [{
           type: 'lcov',
           subdir: '.'
